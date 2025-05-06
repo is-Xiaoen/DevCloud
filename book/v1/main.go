@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/infraboard/mcube/v2/types"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -62,6 +63,10 @@ type BookApiHandler struct {
 // 实现后端分页的
 func (h *BookApiHandler) ListBook(ctx *gin.Context) {
 	set := &BookSet{}
+
+	// List<*Book>
+	//  *Set[T]
+	types.New[*Book]()
 
 	// 给默认值
 	pn, ps := 1, 20
