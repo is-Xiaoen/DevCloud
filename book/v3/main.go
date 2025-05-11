@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"122.51.31.227/go-course/go18/book/v3/config"
+	"122.51.31.227/go-course/go18/book/v3/exception"
 	"122.51.31.227/go-course/go18/book/v3/handlers"
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +18,8 @@ func main() {
 	}
 	config.LoadConfigFromYaml(path)
 
-	server := gin.Default()
+	server := gin.New()
+	server.Use(gin.Logger(), exception.Recovery())
 
 	handlers.Book.Registry(server)
 

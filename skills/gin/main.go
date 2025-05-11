@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	server := gin.Default()
+	server := gin.New()
 
 	server.GET("/hello", func(ctx *gin.Context) {
 		ctx.String(200, "Gin Hello World!")
