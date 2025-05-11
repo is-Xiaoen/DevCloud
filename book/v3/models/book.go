@@ -1,5 +1,7 @@
 package models
 
+import "github.com/infraboard/mcube/v2/tools/pretty"
+
 type BookSet struct {
 	// 总共多少个
 	Total int64 `json:"total"`
@@ -12,6 +14,10 @@ type Book struct {
 	Id uint `json:"id" gorm:"primaryKey;column:id"`
 
 	BookSpec
+}
+
+func (b *Book) String() string {
+	return pretty.ToJSON(b)
 }
 
 type BookSpec struct {

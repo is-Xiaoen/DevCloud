@@ -13,7 +13,7 @@ type CommentController struct {
 }
 
 type AddCommentRequest struct {
-	BookNumber string
+	BookNumber int
 }
 
 func (c *CommentController) AddComment(ctx context.Context, in *AddCommentRequest) (*models.Comment, error) {

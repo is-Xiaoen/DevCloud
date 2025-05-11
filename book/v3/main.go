@@ -10,6 +10,13 @@ import (
 )
 
 func main() {
+	// 加载配置
+	path := os.Getenv("CONFIG_PATH")
+	if path == "" {
+		path = "application.yaml"
+	}
+	config.LoadConfigFromYaml(path)
+
 	server := gin.Default()
 
 	handlers.Book.Registry(server)

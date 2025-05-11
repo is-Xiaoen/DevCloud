@@ -114,29 +114,24 @@ func (h *BookApiHandler) createBook(ctx *gin.Context) {
 		return
 	}
 
-	// 有没有能够检查某个字段是否是必须填
-	// Gin 集成 validator这个库, 通过 struct tag validate 来表示这个字段是否允许为空
-	// validate:"required"
-	// 在数据Bind的时候，这个逻辑会自动运行
-	// if bookSpecInstance.Author == "" {
-	// 	ctx.JSON(400, gin.H{"code": 400, "message": err.Error()})
-	// 	return
-	// }
-
-	bookInstance := &models.Book{BookSpec: *bookSpecInstance}
-
-	// 数据入库(Grom), 补充自增Id的值
-	if err := config.DB().Save(bookInstance).Error; err != nil {
-		ctx.JSON(400, gin.H{"code": 500, "message": err.Error()})
+	book, err := controllers.Book.CreateBook(ctx.Request.Context(), bookSpecInstance)
+	if err != nil {
+		ctx.JSON(400, gin.H{"code": 400, "message": err.Error()})
 		return
 	}
 
 	// 返回响应
-	ctx.JSON(http.StatusCreated, bookInstance)
+	ctx.JSON(http.StatusCreated, book)
 }
 
 func (h *BookApiHandler) getBook(ctx *gin.Context) {
-	book, err := controllers.Book.GetBook(ctx, controllers.NewGetBookRequest(ctx.Param("bn")))
+	bnInt, err := strconv.ParseInt(ctx.Param("bn"), 10, 64)
+	if err != nil {
+		ctx.JSON(400, gin.H{"code": 400, "message": err.Error()})
+		return
+	}
+
+	book, err := controllers.Book.GetBook(ctx, controllers.NewGetBookRequest(int(bnInt)))
 	if err != nil {
 		ctx.JSON(400, gin.H{"code": 400, "message": err.Error()})
 		return

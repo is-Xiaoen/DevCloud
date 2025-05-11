@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/caarlos0/env/v6"
+	"github.com/rs/zerolog"
 	"gopkg.in/yaml.v3"
 	"gorm.io/gorm"
 )
@@ -27,6 +28,10 @@ func C() *Config {
 
 func DB() *gorm.DB {
 	return C().MySQL.GetDB()
+}
+
+func L() *zerolog.Logger {
+	return C().Log.Logger()
 }
 
 // 加载配置 把外部配置读到 config全局变量里面来
