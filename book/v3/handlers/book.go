@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"122.51.31.227/go-course/go18/book/v3/config"
+	"122.51.31.227/go-course/go18/book/v3/controllers"
 	"122.51.31.227/go-course/go18/book/v3/models"
 	"github.com/gin-gonic/gin"
 )
@@ -135,14 +136,13 @@ func (h *BookApiHandler) createBook(ctx *gin.Context) {
 }
 
 func (h *BookApiHandler) getBook(ctx *gin.Context) {
-	bookInstance := &models.Book{}
-	// 需要从数据库中获取一个对象
-	if err := config.DB().Where("id = ?", ctx.Param("bn")).Take(bookInstance).Error; err != nil {
-		ctx.JSON(400, gin.H{"code": 500, "message": err.Error()})
+	book, err := controllers.Book.GetBook(ctx, controllers.NewGetBookRequest(ctx.Param("bn")))
+	if err != nil {
+		ctx.JSON(400, gin.H{"code": 400, "message": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, bookInstance)
+	ctx.JSON(200, book)
 }
 
 func (h *BookApiHandler) updateBook(ctx *gin.Context) {
