@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"122.51.31.227/go-course/go18/book/v3/config"
+	"122.51.31.227/go-course/go18/book/v3/exception"
 	"122.51.31.227/go-course/go18/book/v3/models"
+	"gorm.io/gorm"
 )
 
 var Book = &BookController{}
@@ -37,6 +39,9 @@ func (c *BookController) GetBook(ctx context.Context, in *GetBookRequest) (*mode
 	bookInstance := &models.Book{}
 	// 需要从数据库中获取一个对象
 	if err := config.DB().Where("id = ?", in.BookNumber).Take(bookInstance).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, exception.ErrNotFound("book number: %d not found", in.BookNumber)
+		}
 		return nil, err
 	}
 
