@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/infraboard/mcube/v2/types"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -66,7 +65,7 @@ func (h *BookApiHandler) ListBook(ctx *gin.Context) {
 
 	// List<*Book>
 	//  *Set[T]
-	types.New[*Book]()
+	// types.New[*Book]()
 
 	// 给默认值
 	pn, ps := 1, 20
@@ -96,7 +95,7 @@ func (h *BookApiHandler) ListBook(ctx *gin.Context) {
 	kws := ctx.Query("keywords")
 	if kws != "" {
 		// where title like %kws%
-		query = query.Where("title LIKE ?", "%"+kws+"%x")
+		query = query.Where("title LIKE ?", "%"+kws+"%")
 	}
 
 	// 其他过滤条件
