@@ -1,0 +1,6 @@
+{
+    "go.testEnvVars": {
+        "CONFIG_PATH": "application.yaml"
+    },
+    "go.testEnvFile": "${workspaceFolder}/etc/unit_test.env"
+}
