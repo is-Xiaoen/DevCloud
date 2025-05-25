@@ -5,6 +5,11 @@ import (
 
 	// 业务对象
 	_ "122.51.31.227/go-course/go18/book/v4/apps"
+
+	// 健康检查
+	_ "github.com/infraboard/mcube/v2/ioc/apps/health/gin"
+	// metrics
+	_ "github.com/infraboard/mcube/v2/ioc/apps/metric/gin"
 )
 
 func main() {
