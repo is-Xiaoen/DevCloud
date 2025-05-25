@@ -12,7 +12,7 @@ import (
 )
 
 func TestGetBook(t *testing.T) {
-	book, err := controllers.Book.GetBook(context.Background(), controllers.NewGetBookRequest(3))
+	book, err := controllers.GetBookService().GetBook(context.Background(), controllers.NewGetBookRequest(3))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -20,7 +20,7 @@ func TestGetBook(t *testing.T) {
 }
 
 func TestCreateBook(t *testing.T) {
-	book, err := controllers.Book.CreateBook(context.Background(), &models.BookSpec{
+	book, err := controllers.GetBookService().CreateBook(context.Background(), &models.BookSpec{
 		Title:  "unit test for go controller obj",
 		Author: "will",
 		Price:  99.99,

@@ -6,12 +6,20 @@ import (
 	"122.51.31.227/go-course/go18/book/v3/config"
 	"122.51.31.227/go-course/go18/book/v3/exception"
 	"122.51.31.227/go-course/go18/book/v3/models"
+	"122.51.31.227/go-course/go18/skills/ioc"
 	"gorm.io/gorm"
 )
 
-var Book = &BookController{}
+func GetBookService() *BookController {
+	return ioc.Controller.Get("book_controller").(*BookController)
+}
+
+func init() {
+	ioc.Controller.Registry("book_controller", &BookController{})
+}
 
 type BookController struct {
+	ioc.ObjectImpl
 }
 
 func NewGetBookRequest(bookNumber int) *GetBookRequest {

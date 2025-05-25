@@ -114,7 +114,7 @@ func (h *BookApiHandler) createBook(ctx *gin.Context) {
 		return
 	}
 
-	book, err := controllers.Book.CreateBook(ctx.Request.Context(), bookSpecInstance)
+	book, err := controllers.GetBookService().CreateBook(ctx.Request.Context(), bookSpecInstance)
 	if err != nil {
 		response.Failed(ctx, err)
 		return
@@ -131,7 +131,7 @@ func (h *BookApiHandler) getBook(ctx *gin.Context) {
 		return
 	}
 
-	book, err := controllers.Book.GetBook(ctx, controllers.NewGetBookRequest(int(bnInt)))
+	book, err := controllers.GetBookService().GetBook(ctx, controllers.NewGetBookRequest(int(bnInt)))
 	if err != nil {
 		response.Failed(ctx, err)
 		return

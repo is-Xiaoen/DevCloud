@@ -19,7 +19,7 @@ type AddCommentRequest struct {
 func (c *CommentController) AddComment(ctx context.Context, in *AddCommentRequest) (*models.Comment, error) {
 	// 业务处理的细节
 	// 多个业务模块 进行交互
-	book, err := Book.GetBook(ctx, NewGetBookRequest(in.BookNumber))
+	book, err := GetBookService().GetBook(ctx, NewGetBookRequest(in.BookNumber))
 
 	// if exception.IsApiException(err, exception.CODE_NOT_FOUND) {
 
