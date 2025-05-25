@@ -67,3 +67,14 @@ func (c *BookController) CreateBook(ctx context.Context, in *models.BookSpec) (*
 
 	return bookInstance, nil
 }
+
+func (c *BookController) UpdateBook() {
+	// update(obj)
+	// config.DB().Updates()
+}
+
+func (c *BookController) update(ctx context.Context, obj models.Book) error {
+	// obj.UpdateTime = now()
+	// config.DB().Updates()
+	return nil
+}
