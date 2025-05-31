@@ -12,7 +12,7 @@ type Service interface {
 	RevolkToken(context.Context, *RevolkTokenRequest) (*Token, error)
 
 	// 校验访问令牌：检查令牌的合法性, 是不是伪造的
-	ValidateToken(context.Context, *ValidateTokenRequest) (*Token, error)
+	ValiateToken(context.Context, *ValiateTokenRequest) (*Token, error)
 }
 
 // 用户会给我们 用户的身份凭证，用于换取Token
@@ -63,8 +63,25 @@ func (p IssueParameter) SetAccessToken(v string) {
 	p["access_token"] = v
 }
 
-type RevolkTokenRequest struct {
+func NewRevolkTokenRequest(at, rk string) *RevolkTokenRequest {
+	return &RevolkTokenRequest{
+		AccessToken:  at,
+		RefreshToken: rk,
+	}
 }
 
-type ValidateTokenRequest struct {
+// 万一的Token泄露, 不知道refresh_token，也没法推出
+type RevolkTokenRequest struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+func NewValiateTokenRequest(accessToken string) *ValiateTokenRequest {
+	return &ValiateTokenRequest{
+		AccessToken: accessToken,
+	}
+}
+
+type ValiateTokenRequest struct {
+	AccessToken string `json:"access_token"`
 }
