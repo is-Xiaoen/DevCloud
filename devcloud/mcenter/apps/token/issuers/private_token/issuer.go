@@ -1,0 +1,67 @@
+package privatetoken
+
+import (
+	"context"
+
+	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/token"
+	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/user"
+	"github.com/infraboard/mcube/v2/exception"
+	"github.com/infraboard/mcube/v2/ioc"
+)
+
+func init() {
+	ioc.Config().Registry(&PrivateTokenIssuer{})
+}
+
+type PrivateTokenIssuer struct {
+	ioc.ObjectImpl
+
+	user  user.Service
+	token token.Service
+}
+
+func (p *PrivateTokenIssuer) Name() string {
+	return "private_token_issuer"
+}
+
+func (p *PrivateTokenIssuer) Init() error {
+	p.user = user.GetService()
+	p.token = token.GetService()
+
+	token.RegistryIssuer(token.ISSUER_PRIVATE_TOKEN, p)
+	return nil
+}
+
+func (p *PrivateTokenIssuer) IssueToken(ctx context.Context, parameter token.IssueParameter) (*token.Token, error) {
+	// 1. 校验Token合法
+	oldTk, err := p.token.ValiateToken(ctx, token.NewValiateTokenRequest(parameter.AccessToken()))
+	if err != nil {
+		return nil, err
+	}
+
+	// 2. 查询用户
+	uReq := user.NewDescribeUserRequestById(oldTk.UserIdString())
+	u, err := p.user.DescribeUser(ctx, uReq)
+	if err != nil {
+		if exception.IsNotFoundError(err) {
+			return nil, exception.NewUnauthorized("%s", err)
+		}
+		return nil, err
+	}
+
+	if !u.EnabledApi {
+		return nil, exception.NewPermissionDeny("未开启接口登录")
+	}
+
+	// 3. 颁发token
+	tk := token.NewToken()
+	tk.UserId = u.Id
+	tk.UserName = u.UserName
+	tk.IsAdmin = u.IsAdmin
+
+	expiredTTL := parameter.ExpireTTL()
+	if expiredTTL > 0 {
+		tk.SetExpiredAtByDuration(expiredTTL, 4)
+	}
+	return tk, nil
+}

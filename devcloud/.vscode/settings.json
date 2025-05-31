@@ -1,0 +1,7 @@
+{
+    "go.testEnvVars": {
+        "workspaceFolder": "${workspaceFolder}",
+        "CONFIG_PATH": "${workspaceFolder}/etc/application.toml"
+    },
+    "go.testEnvFile": "${workspaceFolder}/etc/unit_test.env"
+}

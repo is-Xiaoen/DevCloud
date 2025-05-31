@@ -3,16 +3,16 @@ package impl_test
 import (
 	"context"
 
-	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/user"
+	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/token"
 	"122.51.31.227/go-course/go18/devcloud/mcenter/test"
 )
 
 var (
-	impl user.Service
-	ctx  = context.Background()
+	svc token.Service
+	ctx = context.Background()
 )
 
 func init() {
 	test.DevelopmentSet()
-	impl = user.GetService()
+	svc = token.GetService()
 }

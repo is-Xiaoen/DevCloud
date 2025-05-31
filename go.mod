@@ -6,8 +6,11 @@ require (
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/infraboard/mcube/v2 v2.0.59
+	github.com/infraboard/modules v0.0.12
 	github.com/rs/zerolog v1.34.0
 	github.com/stretchr/testify v1.10.0
+	golang.org/x/crypto v0.38.0
+	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.26.0
@@ -83,7 +86,6 @@ require (
 	go.opentelemetry.io/otel/trace v1.35.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.5.0 // indirect
 	golang.org/x/arch v0.15.0 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect

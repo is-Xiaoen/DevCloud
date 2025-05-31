@@ -1,12 +1,64 @@
 package token
 
 import (
+	"context"
 	"fmt"
+	"net/http"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/infraboard/mcube/v2/exception"
 	"github.com/infraboard/mcube/v2/tools/pretty"
 )
+
+func GetAccessTokenFromHTTP(r *http.Request) string {
+	// 先从Token中获取
+	tk := r.Header.Get(ACCESS_TOKEN_HEADER_NAME)
+
+	// 1. 获取Token
+	if tk == "" {
+		cookie, err := r.Cookie(ACCESS_TOKEN_COOKIE_NAME)
+		if err != nil {
+			return ""
+		}
+		tk, _ = url.QueryUnescape(cookie.Value)
+	} else {
+		// 处理 带格式: Bearer <Your API key>
+		ft := strings.Split(tk, " ")
+		if len(ft) > 1 {
+			tk = ft[1]
+		}
+	}
+	return tk
+}
+
+func GetTokenFromCtx(ctx context.Context) *Token {
+	if v := ctx.Value(CTX_TOKEN_KEY); v != nil {
+		return v.(*Token)
+	}
+	return nil
+}
+
+func GetRefreshTokenFromHTTP(r *http.Request) string {
+	// 先从Token中获取
+	tk := r.Header.Get(REFRESH_TOKEN_HEADER_NAME)
+	return tk
+}
+
+func NewToken() *Token {
+	tk := &Token{
+		// 生产一个UUID的字符串
+		AccessToken:  MakeBearer(24),
+		RefreshToken: MakeBearer(32),
+		IssueAt:      time.Now(),
+		Status:       NewStatus(),
+		Extras:       map[string]string{},
+		Scope:        map[string]string{},
+	}
+
+	return tk
+}
 
 // 需要存储到数据库里面的对象(表)
 

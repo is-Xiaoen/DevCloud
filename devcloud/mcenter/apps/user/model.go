@@ -1,10 +1,11 @@
 package user
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
 
+	"github.com/infraboard/mcube/v2/exception"
+	"github.com/infraboard/mcube/v2/tools/pretty"
 	"github.com/infraboard/modules/iam/apps"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -30,13 +31,18 @@ type User struct {
 }
 
 func (u *User) String() string {
-	dj, _ := json.Marshal(u)
-	return string(dj)
+	return pretty.ToJSON(u)
 }
 
 // 判断该用户的密码是否正确
 func (u *User) CheckPassword(password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	// u.Password hash过后的只
+	// (password 原始值 + hash值中提区salt)
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	if err != nil {
+		return exception.NewUnauthorized("用户名或者密码对正确")
+	}
+	return nil
 }
 
 // 声明你这个对象存储在users表里面

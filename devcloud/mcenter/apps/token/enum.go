@@ -29,3 +29,9 @@ const (
 	// 异常Ip登陆
 	LOCK_TYPE_OTHER_IP_LOGGED_IN
 )
+
+type DESCRIBE_BY int
+
+const (
+	DESCRIBE_BY_ACCESS_TOKEN DESCRIBE_BY = iota
+)
