@@ -4,13 +4,14 @@ go 1.24.1
 
 require (
 	github.com/caarlos0/env/v6 v6.10.1
+	github.com/emicklei/go-restful-openapi/v2 v2.11.0
+	github.com/emicklei/go-restful/v3 v3.12.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/infraboard/mcube/v2 v2.0.59
 	github.com/infraboard/modules v0.0.12
 	github.com/rs/zerolog v1.34.0
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/crypto v0.38.0
-	golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.26.0
@@ -76,6 +77,7 @@ require (
 	github.com/uptrace/opentelemetry-go-extra/otelgorm v0.3.2 // indirect
 	github.com/uptrace/opentelemetry-go-extra/otelsql v0.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/github.com/emicklei/go-restful/otelrestful v0.60.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.60.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.60.0 // indirect
 	go.opentelemetry.io/otel v1.35.0 // indirect
