@@ -27,6 +27,8 @@ func (m *MapContainer) Get(name string) Object {
 }
 
 // 初始化所有已经注册的对象
+// yaml, toml map[key]obj
+// [object_name]
 func (m *MapContainer) Init() error {
 	for _, v := range m.storage {
 		if err := v.Init(); err != nil {
