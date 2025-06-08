@@ -8,6 +8,12 @@ import (
 )
 
 func (h *UserRestfulApiHandler) QueryUser(r *restful.Request, w *restful.Response) {
+	// 补充下 Token校验
+	// 作为一个开发者, 业务接口开发代码里面，需要补充认证
+	// 通过中间件 来 剥离开 用户认证逻辑:
+	// 站在一个库作者的角度 来设计一个 认证的使用方式, 能不能 通过开关来控制一个接口需不需要被保护(on/off)
+	// 这个开关应该加那里? 接口描述(接口的装饰信息)
+
 	// 获取用户通过API传入的参数
 	req := user.NewQueryUserRequest()
 
@@ -36,5 +42,6 @@ func (h *UserRestfulApiHandler) QueryUser(r *restful.Request, w *restful.Respons
 
 	// 能不能直接通过JSON标签 这样方式来完成脱敏: must:"3,4" (181*****4777)
 	// 不能每次都调用吧，因此这个脱敏逻辑 放到 Rsep函数内进行处理
+	//
 	response.Success(w, set)
 }
