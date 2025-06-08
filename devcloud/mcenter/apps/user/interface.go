@@ -33,13 +33,13 @@ type Service interface {
 
 func NewQueryUserRequest() *QueryUserRequest {
 	return &QueryUserRequest{
-		PageRequest: request.NewDefaultPageRequest(),
+		PageRequest: *request.NewDefaultPageRequest(),
 		UserIds:     []uint64{},
 	}
 }
 
 type QueryUserRequest struct {
-	*request.PageRequest
+	request.PageRequest
 	UserIds []uint64 `form:"user" json:"user"`
 }
 

@@ -22,6 +22,7 @@ func GetAccessTokenFromHTTP(r *http.Request) string {
 		if err != nil {
 			return ""
 		}
+		// ?token=xxxx
 		tk, _ = url.QueryUnescape(cookie.Value)
 	} else {
 		// 处理 带格式: Bearer <Your API key>
