@@ -10,7 +10,7 @@ import (
 	_ "122.51.31.227/go-course/go18/devcloud/mcenter/apps"
 )
 
-func DevelopmentSet() {
+func DevelopmentSetUp() {
 	// import 后自动执行的逻辑
 	// 工具对象的初始化, 需要的是绝对路径
 	ioc.DevelopmentSetupWithPath(os.Getenv("CONFIG_PATH"))

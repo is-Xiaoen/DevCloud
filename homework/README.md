@@ -15,7 +15,9 @@
 项目名称: devcloud
 
 + [GO18015-鑫](https://github.com/sword-demon/go18)
-+ [GO18012-Leowy](https://gitee.com/leo_wy/GoProjects.git)
 + [GO18005-康](https://github.com/YouthInThinking/GoProject.git)
 + [GO18007-磊](https://gitee.com/wangleisir/mage_go_project.git)
+
++ [GO18012-Leowy](https://gitee.com/leo_wy/GoProjects.git)
 + [硕](https://gitee.com/liushuowalk/kubernetersgo)
+
