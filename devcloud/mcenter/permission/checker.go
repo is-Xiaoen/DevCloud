@@ -4,11 +4,13 @@ import (
 	"context"
 
 	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/endpoint"
+	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/policy"
 	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/token"
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/v2/exception"
 	"github.com/infraboard/mcube/v2/http/restful/response"
 	"github.com/infraboard/mcube/v2/ioc"
+	"github.com/infraboard/mcube/v2/ioc/config/application"
 	"github.com/infraboard/mcube/v2/ioc/config/gorestful"
 	"github.com/infraboard/mcube/v2/ioc/config/log"
 	"github.com/rs/zerolog"
@@ -40,8 +42,8 @@ type Checker struct {
 	ioc.ObjectImpl
 	log *zerolog.Logger
 
-	token token.Service
-	// policy policy.Service
+	token  token.Service
+	policy policy.Service
 }
 
 // 中间件对象名称
@@ -59,7 +61,7 @@ func (c *Checker) Priority() int {
 func (c *Checker) Init() error {
 	c.log = log.Sub(c.Name())
 	c.token = token.GetService()
-	// c.policy = policy.GetService()
+	c.policy = policy.GetService()
 
 	// 注册认证中间件
 	gorestful.RootRouter().Filter(c.Check)
@@ -116,5 +118,53 @@ func (c *Checker) CheckToken(r *restful.Request) (*token.Token, error) {
 }
 
 func (c *Checker) CheckPolicy(r *restful.Request, tk *token.Token, route *endpoint.RouteEntry) error {
+	// 判断用户是否是超级管理员
+	if tk.IsAdmin {
+		return nil
+	}
+
+	// 角色校验 @Required('admin', '')
+	if route.HasRequiredRole() {
+		set, err := c.policy.QueryPolicy(r.Request.Context(),
+			policy.NewQueryPolicyRequest().
+				SetNamespaceId(tk.NamespaceId).
+				SetUserId(tk.UserId).
+				SetExpired(false).
+				SetEnabled(true).
+				SetWithRole(true),
+		)
+		if err != nil {
+			return exception.NewInternalServerError("%s", err.Error())
+		}
+		hasPerm := false
+		for i := range set.Items {
+			p := set.Items[i]
+			if route.IsRequireRole(p.Role.Name) {
+				hasPerm = true
+				break
+			}
+		}
+		if !hasPerm {
+			return exception.NewPermissionDeny("无权限访问")
+		}
+	}
+
+	// API权限校验
+	if route.RequiredPerm {
+		validateReq := policy.NewValidateEndpointPermissionRequest()
+		validateReq.UserId = tk.UserId
+		validateReq.NamespaceId = tk.NamespaceId
+		validateReq.Service = application.Get().GetAppName()
+		validateReq.Method = route.Method
+		validateReq.Path = route.Path
+		resp, err := c.policy.ValidateEndpointPermission(r.Request.Context(), validateReq)
+		if err != nil {
+			return exception.NewInternalServerError("%s", err.Error())
+		}
+		if !resp.HasPermission {
+			return exception.NewPermissionDeny("无权限访问")
+		}
+	}
+
 	return nil
 }

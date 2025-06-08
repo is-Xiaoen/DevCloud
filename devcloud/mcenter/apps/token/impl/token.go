@@ -49,6 +49,10 @@ func (i *TokenServiceImpl) IssueToken(ctx context.Context, in *token.IssueTokenR
 		}
 	}
 
+	if tk.NamespaceId == 0 {
+		tk.NamespaceId = 1
+	}
+
 	// 保持Token
 	if err := datasource.DBFromCtx(ctx).
 		Create(tk).

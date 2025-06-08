@@ -29,6 +29,7 @@ const (
 type TYPE int32
 
 const (
+	// 普通用户
 	TYPE_SUB TYPE = 0
 )
 
