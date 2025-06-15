@@ -1,6 +1,7 @@
 package api
 
 import (
+	"122.51.31.227/go-course/go18/devcloud/audit/audit"
 	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/user"
 	"122.51.31.227/go-course/go18/devcloud/mcenter/permission"
 	"github.com/infraboard/mcube/v2/ioc"
@@ -40,6 +41,7 @@ func (h *UserRestfulApiHandler) Init() error {
 		Metadata(permission.Permission(true)).
 		Metadata(permission.Resource("user")).
 		Metadata(permission.Action("list")).
+		Metadata(audit.Enable(true)).
 		Param(restful.QueryParameter("page_size", "分页大小").DataType("integer")).
 		Param(restful.QueryParameter("page_number", "页码").DataType("integer")).
 		Writes(Set{}).

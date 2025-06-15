@@ -3,6 +3,7 @@ package consumer
 import (
 	"context"
 
+	"122.51.31.227/go-course/go18/devcloud/audit/apps/event"
 	"github.com/infraboard/mcube/v2/ioc"
 	"github.com/infraboard/mcube/v2/ioc/config/log"
 	"github.com/rs/zerolog"
@@ -51,6 +52,10 @@ func (i *consumer) Init() error {
 
 	go i.Run(i.ctx)
 	return nil
+}
+
+func (i *consumer) Priority() int {
+	return event.PRIORITY - 1
 }
 
 func (i *consumer) Close(ctx context.Context) error {
