@@ -3,5 +3,6 @@
         "workspaceFolder": "${workspaceFolder}",
         "CONFIG_PATH": "${workspaceFolder}/application.yaml"
     },
-    "go.testEnvFile": "${workspaceFolder}/etc/unit_test.env"
+    "go.testEnvFile": "${workspaceFolder}/etc/unit_test.env",
+    "terminal.integrated.suggest.enabled": true
 }
