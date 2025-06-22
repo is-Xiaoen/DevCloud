@@ -16,7 +16,7 @@ func (i *ApplicationServiceImpl) CreateApplication(ctx context.Context, in *appl
 	}
 
 	if err := datasource.DBFromCtx(ctx).
-		Create(ins).
+		Save(ins).
 		Error; err != nil {
 		return nil, err
 	}
@@ -38,7 +38,13 @@ func (i *ApplicationServiceImpl) QueryApplication(ctx context.Context, in *appli
 		query = query.Where("ready = ?", *in.Ready)
 	}
 
-	in.GormResourceFilter(query)
+	if in.NamespaceId != nil {
+		query = query.Where("namespace = ?", in.NamespaceId)
+	}
+	// 过滤条件, Label
+
+	if in.Scope != nil {
+	}
 
 	err := query.Count(&set.Total).Error
 	if err != nil {

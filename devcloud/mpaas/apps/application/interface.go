@@ -57,6 +57,7 @@ type DeleteApplicationRequest struct {
 }
 
 type DescribeApplicationRequest struct {
+	policy.ResourceScope
 	// 应用ID
 	Id string `json:"id" bson:"_id"`
 }
