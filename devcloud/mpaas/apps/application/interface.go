@@ -31,12 +31,12 @@ type Service interface {
 }
 
 type QueryApplicationRequest struct {
-	*request.PageRequest
 	policy.ResourceScope
 	QueryApplicationRequestSpec
 }
 
 type QueryApplicationRequestSpec struct {
+	*request.PageRequest
 	// 应用ID
 	Id string `json:"id" bson:"_id"`
 	// 应用名称
