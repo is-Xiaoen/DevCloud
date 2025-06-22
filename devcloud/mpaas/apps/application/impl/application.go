@@ -40,14 +40,6 @@ func (i *ApplicationServiceImpl) QueryApplication(ctx context.Context, in *appli
 		query = query.Where("ready = ?", *in.Ready)
 	}
 
-	if in.NamespaceId != nil {
-		query = query.Where("namespace = ?", in.NamespaceId)
-	}
-	// 过滤条件, Label
-
-	if in.Scope != nil {
-	}
-
 	err := query.Count(&set.Total).Error
 	if err != nil {
 		return nil, err
