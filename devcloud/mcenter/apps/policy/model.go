@@ -1,18 +1,17 @@
 package policy
 
 import (
-	"encoding/json"
-	"fmt"
 	"time"
 
 	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/namespace"
 	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/role"
 	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/user"
-	"github.com/infraboard/mcube/v2/ioc/config/datasource"
 	"github.com/infraboard/mcube/v2/ioc/config/validator"
 	"github.com/infraboard/mcube/v2/tools/pretty"
 	"github.com/infraboard/modules/iam/apps"
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func NewPolicy() *Policy {
@@ -82,10 +81,11 @@ type ResourceScope struct {
 	Scope map[string][]string `json:"scope" bson:"scope" gorm:"column:scope;serializer:json;type:json" description:"数据访问的范围" optional:"true"`
 }
 
-// 辅助函数：将字符串切片转换为 JSON 数组字符串
-func toJsonArray(arr []string) string {
-	b, _ := json.Marshal(arr)
-	return string(b)
+func (l *ResourceScope) SetScope(key string, value []string) {
+	if l.Scope == nil {
+		l.Scope = map[string][]string{}
+	}
+	l.Scope[key] = value
 }
 
 func (r ResourceScope) GormResourceFilter(query *gorm.DB) *gorm.DB {
@@ -93,23 +93,27 @@ func (r ResourceScope) GormResourceFilter(query *gorm.DB) *gorm.DB {
 		query = query.Where("namespace = ?", r.NamespaceId)
 	}
 
-	switch datasource.Get().Provider {
-	case datasource.PROVIDER_POSTGRES:
-		for key, values := range r.Scope {
-			for k, v := range r.Scope {
-				// 创建一个临时 JSON 对象 {"key": ["value1", "value2"]}
-				jsonCondition := fmt.Sprintf(`{"%s": %s}`, k, toJsonArray(v))
-				query = query.Where("label @> ?", jsonCondition)
-			}
-			query = query.Where("label -->>? IN ?", key, values)
+	for key, values := range r.Scope {
+		if len(values) == 0 {
+			continue
 		}
-	case datasource.PROVIDER_MYSQL:
-		// 过滤条件, Label
-		for key, values := range r.Scope {
-			query = query.Where("label->>? IN (?)", "$."+key, values)
-		}
-	}
 
+		// 构建"标签不存在"条件
+		notHasKey := clause.Not(datatypes.JSONQuery("label").HasKey(key))
+
+		// 构建"标签值匹配"条件
+		var valueMatches []clause.Expression
+		for _, val := range values {
+			valueMatches = append(valueMatches,
+				datatypes.JSONQuery("label").Equals(val, key))
+		}
+
+		// 组合条件：标签不存在 OR 标签值匹配
+		query = query.Where(clause.Or(
+			notHasKey,
+			clause.Or(valueMatches...),
+		))
+	}
 	return query
 }
 
@@ -127,4 +131,11 @@ type ResourceLabel struct {
 	NamespaceId *uint64 `json:"namespace_id" bson:"namespace_id" gorm:"column:namespace_id;type:varchar(200);index" description:"策略生效的空间Id" optional:"true"`
 	// 访问范围, 需要提前定义scope, 比如环境, 后端开发小组，开发资源
 	Label map[string]string `json:"label" bson:"label" gorm:"column:label;serializer:json;type:json" description:"数据访问的范围" optional:"true"`
+}
+
+func (l *ResourceLabel) SetLabel(key, value string) {
+	if l.Label == nil {
+		l.Label = map[string]string{}
+	}
+	l.Label[key] = value
 }

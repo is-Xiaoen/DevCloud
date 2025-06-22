@@ -30,6 +30,14 @@ type Service interface {
 	DescribeApplication(context.Context, *DescribeApplicationRequest) (*Application, error)
 }
 
+func NewQueryApplicationRequest() *QueryApplicationRequest {
+	return &QueryApplicationRequest{
+		QueryApplicationRequestSpec: QueryApplicationRequestSpec{
+			PageRequest: request.NewDefaultPageRequest(),
+		},
+	}
+}
+
 type QueryApplicationRequest struct {
 	policy.ResourceScope
 	QueryApplicationRequestSpec
