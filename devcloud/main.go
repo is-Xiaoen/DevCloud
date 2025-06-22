@@ -7,6 +7,7 @@ import (
 	_ "122.51.31.227/go-course/go18/devcloud/mcenter/apps"
 	// audit 业务对象
 	_ "122.51.31.227/go-course/go18/devcloud/audit/apps"
+	// mpaas 应用发布
 
 	// 非功能性模块
 	_ "github.com/infraboard/mcube/v2/ioc/apps/apidoc/restful"
