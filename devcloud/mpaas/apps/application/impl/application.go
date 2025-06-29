@@ -29,6 +29,7 @@ func (i *ApplicationServiceImpl) CreateApplication(ctx context.Context, in *appl
 func (i *ApplicationServiceImpl) QueryApplication(ctx context.Context, in *application.QueryApplicationRequest) (*types.Set[*application.Application], error) {
 	set := types.New[*application.Application]()
 
+	i.log.Debug().Msgf("scope: %s", in.ResourceScope)
 	query := in.GormResourceFilter(datasource.DBFromCtx(ctx).Model(&application.Application{}))
 	if in.Id != "" {
 		query = query.Where("id = ?", in.Id)

@@ -11,8 +11,8 @@
   database = "devcloud_go18"
   username = "root"
   password = "123456"
-  auto_migrate = true
-  debug = true
+  auto_migrate = false
+  debug = false
 
 [mongo]
   endpoints = ["127.0.0.1:27017"]

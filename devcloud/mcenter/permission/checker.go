@@ -92,6 +92,14 @@ func (c *Checker) Check(r *restful.Request, w *restful.Response, next *restful.F
 			response.Failed(w, err)
 			return
 		}
+
+		// 如果校验成功，需要把 用户的身份信息，放到请求的上下文中，方便后面的逻辑获取
+		// context.WithValue 来往ctx 添加 value
+		// key: value, value token对象
+		ctx := context.WithValue(r.Request.Context(), token.CTX_TOKEN_KEY, tk)
+
+		// ctx 生成一个新的，继续往下传递
+		r.Request = r.Request.WithContext(ctx)
 	}
 
 	// 请求处理
@@ -111,13 +119,6 @@ func (c *Checker) CheckToken(r *restful.Request) (*token.Token, error) {
 		return nil, err
 	}
 
-	// 如果校验成功，需要把 用户的身份信息，放到请求的上下文中，方便后面的逻辑获取
-	// context.WithValue 来往ctx 添加 value
-	// key: value, value token对象
-	ctx := context.WithValue(r.Request.Context(), token.CTX_TOKEN_KEY, tk)
-
-	// ctx 生成一个新的，继续往下传递
-	r.Request = r.Request.WithContext(ctx)
 	return tk, nil
 }
 
@@ -131,7 +132,7 @@ func (c *Checker) CheckPolicy(r *restful.Request, tk *token.Token, route *endpoi
 	if route.HasRequiredRole() {
 		set, err := c.policy.QueryPolicy(r.Request.Context(),
 			policy.NewQueryPolicyRequest().
-				SetNamespaceId(tk.NamespaceId).
+				SetNamespaceId(tk.GetNamespaceId()).
 				SetUserId(tk.UserId).
 				SetExpired(false).
 				SetEnabled(true).
@@ -145,6 +146,9 @@ func (c *Checker) CheckPolicy(r *restful.Request, tk *token.Token, route *endpoi
 			p := set.Items[i]
 			if route.IsRequireRole(p.Role.Name) {
 				hasPerm = true
+
+				// 把这个scope传递下去
+				tk.Scope = p.Scope
 				break
 			}
 		}
@@ -157,7 +161,7 @@ func (c *Checker) CheckPolicy(r *restful.Request, tk *token.Token, route *endpoi
 	if route.RequiredPerm {
 		validateReq := policy.NewValidateEndpointPermissionRequest()
 		validateReq.UserId = tk.UserId
-		validateReq.NamespaceId = tk.NamespaceId
+		validateReq.ResourceScope = tk.ResourceScope
 		validateReq.Service = application.Get().GetAppName()
 		validateReq.Method = route.Method
 		validateReq.Path = route.Path
@@ -168,6 +172,9 @@ func (c *Checker) CheckPolicy(r *restful.Request, tk *token.Token, route *endpoi
 		if !resp.HasPermission {
 			return exception.NewPermissionDeny("无权限访问")
 		}
+
+		tk.ResourceScope = resp.ResourceScope
+		tk.BuildMySQLPrefixBlob()
 	}
 
 	return nil

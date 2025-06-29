@@ -7,6 +7,7 @@ import (
 	// 要注册哪些对象, Book, Comment
 
 	// 加载的业务对象
+	_ "122.51.31.227/go-course/go18/devcloud/mcenter/apps"
 	_ "122.51.31.227/go-course/go18/devcloud/mpaas/apps"
 )
 

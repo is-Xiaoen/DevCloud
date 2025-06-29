@@ -8,7 +8,7 @@ import (
 
 func TestQueryApiPermission(t *testing.T) {
 	req := role.NewQueryApiPermissionRequest()
-	req.AddRoleId(2)
+	req.AddRoleId(3)
 	set, err := impl.QueryApiPermission(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -17,8 +17,11 @@ func TestQueryApiPermission(t *testing.T) {
 }
 
 func TestAddApiPermission(t *testing.T) {
-	req := role.NewAddApiPermissionRequest(1)
-	req.Add(role.NewResourceActionApiPermissionSpec("devcloud", "user", "list"))
+	req := role.NewAddApiPermissionRequest(3)
+	req.Add(
+		role.NewResourceActionApiPermissionSpec("devcloud", "user", "list"),
+		// role.NewResourceActionApiPermissionSpec("devcloud", "application", "list"),
+	)
 	set, err := impl.AddApiPermission(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -28,7 +31,7 @@ func TestAddApiPermission(t *testing.T) {
 
 func TestQueryMatchedEndpoint(t *testing.T) {
 	req := role.NewQueryMatchedEndpointRequest()
-	req.Add(1)
+	req.Add(3)
 	set, err := impl.QueryMatchedEndpoint(ctx, req)
 	if err != nil {
 		t.Fatal(err)

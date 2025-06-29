@@ -20,9 +20,14 @@ func TestQueryPolicy(t *testing.T) {
 
 func TestCreatePolicy(t *testing.T) {
 	req := policy.NewCreatePolicyRequest()
+	// guest
 	req.UserId = 2
-	req.RoleId = []uint64{1}
+	// 开发
+	req.RoleId = []uint64{3}
+	// default
 	req.SetNamespaceId(1)
+	// 开发小组1的资源
+	req.SetScope("team", []string{"dev01"})
 	set, err := impl.CreatePolicy(ctx, req)
 	if err != nil {
 		t.Fatal(err)

@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/policy"
 	"github.com/infraboard/mcube/v2/exception"
 	"github.com/infraboard/mcube/v2/tools/pretty"
 )
@@ -56,7 +57,6 @@ func NewToken() *Token {
 		IssueAt:      time.Now(),
 		Status:       NewStatus(),
 		Extras:       map[string]string{},
-		Scope:        map[string]string{},
 	}
 
 	return tk
@@ -77,12 +77,14 @@ type Token struct {
 	UserName string `json:"user_name" gorm:"column:user_name;type:varchar(100);not null;index" description:"持有该Token的用户名称"`
 	// 是不是管理员
 	IsAdmin bool `json:"is_admin" gorm:"column:is_admin;type:tinyint(1)" description:"是不是管理员"`
-	// 令牌生效空间Id
-	NamespaceId uint64 `json:"namespace_id" gorm:"column:namespace_id;type:uint;index" description:"令牌所属空间Id"`
+
+	// 令牌生效空间Ids
+	policy.ResourceScope
+	// NamespaceId uint64 `json:"namespace_id" gorm:"column:namespace_id;type:uint;index" description:"令牌所属空间Id"`
 	// 令牌生效空间名称
 	NamespaceName string `json:"namespace_name" gorm:"column:namespace_name;type:varchar(100);index" description:"令牌所属空间"`
-	// 访问范围定义, 鉴权完成后补充
-	Scope map[string]string `json:"scope" gorm:"column:scope;type:varchar(100);serializer:json" description:"令牌访问范围定义"`
+	// // 访问范围定义, 鉴权完成后补充
+	// Scope map[string][]string `json:"scope" gorm:"column:scope;type:varchar(100);serializer:json" description:"令牌访问范围定义"`
 	// 颁发给用户的访问令牌(用户需要携带Token来访问接口)
 	AccessToken string `json:"access_token" gorm:"column:access_token;type:varchar(100);not null;uniqueIndex" description:"访问令牌"`
 	// 访问令牌过期时间
@@ -103,6 +105,10 @@ type Token struct {
 
 func (t *Token) TableName() string {
 	return "tokens"
+}
+
+func (r *Token) String() string {
+	return pretty.ToJSON(r)
 }
 
 // 判断访问令牌是否过期,没设置代表用不过期
@@ -156,10 +162,6 @@ func (t *Token) AccessTokenExpiredTTL() int {
 
 func (t *Token) SetRefreshTokenExpiredAt(v time.Time) {
 	t.RefreshTokenExpiredAt = &v
-}
-
-func (t *Token) String() string {
-	return pretty.ToJSON(t)
 }
 
 func (t *Token) SetIssuer(issuer string) *Token {

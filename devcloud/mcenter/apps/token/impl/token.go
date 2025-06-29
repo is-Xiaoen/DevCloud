@@ -49,8 +49,8 @@ func (i *TokenServiceImpl) IssueToken(ctx context.Context, in *token.IssueTokenR
 		}
 	}
 
-	if tk.NamespaceId == 0 {
-		tk.NamespaceId = 1
+	if tk.NamespaceId == nil {
+		tk.SetNamespaceId(1)
 	}
 
 	// 保持Token

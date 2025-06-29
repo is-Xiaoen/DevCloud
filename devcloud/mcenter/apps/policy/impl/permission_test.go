@@ -8,7 +8,7 @@ import (
 
 func TestQueryNamespace(t *testing.T) {
 	req := policy.NewQueryNamespaceRequest()
-	req.UserId = 1
+	req.UserId = 2
 	set, err := impl.QueryNamespace(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -29,8 +29,8 @@ func TestQueryEndpoint(t *testing.T) {
 
 func TestValidateEndpointPermission(t *testing.T) {
 	req := policy.NewValidateEndpointPermissionRequest()
-	req.UserId = 1
-	req.NamespaceId = 1
+	req.UserId = 3
+	req.SetNamespaceId(1)
 	req.Service = "devcloud"
 	req.Method = "GET"
 	req.Path = "/api/devcloud/v1/users/"
