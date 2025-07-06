@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"122.51.31.227/go-course/go18/devcloud/cmdb/apps/resource"
+	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/policy"
 	"github.com/google/uuid"
 	"github.com/infraboard/devops/pkg/model"
 	"github.com/infraboard/mcube/v2/crypto/cbc"
@@ -28,7 +29,10 @@ func NewSecret(in *CreateSecretRequest) *Secret {
 
 type Secret struct {
 	model.Meta
-	CreateSecretRequest `bson:"inline"`
+	// 资源范围, Namespace是继承的, Scope是API添加的
+	policy.ResourceLabel
+	// 资源定义
+	CreateSecretRequest
 }
 
 func (s *Secret) TableName() string {
@@ -54,6 +58,8 @@ func NewCreateSecretRequest() *CreateSecretRequest {
 }
 
 type CreateSecretRequest struct {
+	// 是否启用
+	Enabled *bool `json:"enabled" gorm:"column:enabled"`
 	// 名称
 	Name string `json:"name" gorm:"column:name"`
 	// 尝试
@@ -76,8 +82,21 @@ type CreateSecretRequest struct {
 	isEncrypted bool `gorm:"-"`
 }
 
-func (r *CreateSecretRequest) SetIsEncrypted(v bool) {
+func (r *CreateSecretRequest) SetIsEncrypted(v bool) *CreateSecretRequest {
 	r.isEncrypted = v
+	return r
+}
+
+func (r *CreateSecretRequest) SetEnabled(v bool) *CreateSecretRequest {
+	r.Enabled = &v
+	return r
+}
+
+func (r *CreateSecretRequest) GetEnabled() bool {
+	if r.Enabled == nil {
+		return false
+	}
+	return *r.Enabled
 }
 
 func (r *CreateSecretRequest) GetSyncLimit() int64 {

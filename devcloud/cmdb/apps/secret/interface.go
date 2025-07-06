@@ -4,10 +4,12 @@ import (
 	"context"
 
 	"122.51.31.227/go-course/go18/devcloud/cmdb/apps/resource"
+	"122.51.31.227/go-course/go18/devcloud/mcenter/apps/policy"
 	"github.com/infraboard/mcube/v2/http/request"
 	"github.com/infraboard/mcube/v2/ioc"
 	"github.com/infraboard/mcube/v2/tools/pretty"
 	"github.com/infraboard/mcube/v2/types"
+	"github.com/infraboard/modules/task/apps/task"
 )
 
 const (
@@ -34,10 +36,8 @@ type Service interface {
 	// 这个接口调用持续30分钟...
 	// 需要拆解为异步任务: 用户调用了同步后, 里面返回, 这个同步任务在后台执行(Gorouties), 需要查询同步日志(Ws)
 
-	// 执行同步
-	SyncResource(context.Context, *SyncResourceRequest) (*SyncResourceTask, error)
-	// 查询同步日志
-	QuerySyncLog(context.Context, *QuerySyncLogRequest) (*types.Set[*SyncRecord], error)
+	// 使用task模块来执行异步任务, 通过TaskId查询异步任务状态
+	SyncResource(context.Context, *SyncResourceRequest) (*types.Set[*task.Task], error)
 }
 
 // 同步记录(task) 有状态
@@ -70,6 +70,7 @@ func NewQuerySecretRequest() *QuerySecretRequest {
 }
 
 type QuerySecretRequest struct {
+	policy.ResourceScope
 	// 分页请求
 	*request.PageRequest
 }
@@ -81,6 +82,7 @@ func NewDescribeSecretRequeset(id string) *DescribeSecretRequeset {
 }
 
 type DescribeSecretRequeset struct {
+	policy.ResourceScope
 	Id string `json:"id"`
 }
 

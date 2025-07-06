@@ -10,7 +10,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/infraboard/devops v0.0.6
 	github.com/infraboard/mcube/v2 v2.0.61
-	github.com/infraboard/modules v0.0.12
+	github.com/infraboard/modules v0.0.13
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.34.0
 	github.com/segmentio/kafka-go v0.4.47
@@ -117,5 +117,6 @@ require (
 	modernc.org/mathutil v1.5.0 // indirect
 	modernc.org/memory v1.5.0 // indirect
 	modernc.org/sqlite v1.23.1 // indirect
+	resty.dev/v3 v3.0.0-beta.2 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )

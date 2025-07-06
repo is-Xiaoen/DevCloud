@@ -32,7 +32,3 @@ const (
 )
 
 type TYPE string
-
-const ()
-
-type STATUS string

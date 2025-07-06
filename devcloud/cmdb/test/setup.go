@@ -1,0 +1,21 @@
+package test
+
+import (
+	"os"
+
+	"github.com/infraboard/mcube/v2/ioc"
+	// 要注册哪些对象, Book, Comment
+
+	// 加载的业务对象
+	_ "122.51.31.227/go-course/go18/devcloud/cmdb/apps"
+	// task模块
+	_ "github.com/infraboard/modules/task/apps"
+	// _ "122.51.31.227/go-course/go18/devcloud/mcenter/apps"
+	// _ "122.51.31.227/go-course/go18/devcloud/mpaas/apps"
+)
+
+func DevelopmentSetUp() {
+	// import 后自动执行的逻辑
+	// 工具对象的初始化, 需要的是绝对路径
+	ioc.DevelopmentSetupWithPath(os.Getenv("CONFIG_PATH"))
+}
