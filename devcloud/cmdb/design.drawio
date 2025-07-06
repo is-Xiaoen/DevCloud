@@ -1,0 +1,68 @@
+<mxfile host="65bd71144e">
+    <diagram id="_dFAOaWQpwMIgqf1TTqB" name="第 1 页">
+        <mxGraphModel dx="888" dy="495" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;基于模型&lt;/h1&gt;&lt;p&gt;这里的模型，数据库里面的一种表&lt;/p&gt;&lt;p&gt;基于关系性数据库，设计 表概念&lt;/p&gt;&lt;p&gt;1. 传统: 数据库里面添加表&lt;/p&gt;&lt;p&gt;2.&amp;nbsp; 通过cmdb提供的API来添加模型&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="30" y="70" width="200" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4" target="5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="1: N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="6">
+                    <mxGeometry x="0.0067" y="-2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="model表&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;模型的名称(ec2)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="250" width="310" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="5" target="8">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="1: N" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="10">
+                    <mxGeometry x="-0.2893" y="-1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="5" value="model 字段表&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;模型的字段&lt;/div&gt;&lt;div&gt;（name: 名称, ip: 主机的IP)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="460" y="250" width="310" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="实例表:&lt;div&gt;核心 记录 模型字段对应的数据&lt;/div&gt;&lt;div&gt;name字段编号(1): ec2_01&lt;/div&gt;&lt;div&gt;ip的字段编号(2): 10.10.10.1&amp;nbsp;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="460" y="510" width="310" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;ec2实例[] {&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;name: ec2_01&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;ip: 10.10.10.1&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;div&gt;}&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="510" width="170" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;基于表的CMDB&lt;/h1&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;沿用关系性数据库的设计逻辑, 已有的数据库工具&lt;/p&gt;&lt;p&gt;1. 提供一组API来让用户录入数控，并且通过API查询数据库&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="70" y="690" width="410" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="资源表&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;通用字段,&amp;nbsp; 通过直接添加， 非通用字段, 直接存储为json&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="870" width="310" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="Resource: CRUD的API" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="840" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="&lt;div&gt;凭证管理&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;存储敏感数据的表(对称加解密)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="1110" width="310" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="Secret: CRUD API" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="1080" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;敏感数据&lt;/h1&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;1.&amp;nbsp; 存储加密, 访问运维看到数据库&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;1.&amp;nbsp; API 提供的数据 需要脱名，这种数据是不允许通过API对外开放的, 只允许进程内使用&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="400" y="1100" width="410" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="sync" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="1220" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="secret" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="1220" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" style="edgeStyle=none;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.869;entryY=0.984;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="18" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

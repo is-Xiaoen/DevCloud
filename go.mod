@@ -8,6 +8,7 @@ require (
 	github.com/emicklei/go-restful/v3 v3.12.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
+	github.com/infraboard/devops v0.0.6
 	github.com/infraboard/mcube/v2 v2.0.61
 	github.com/infraboard/modules v0.0.12
 	github.com/rs/xid v1.6.0
@@ -31,7 +32,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/gin-contrib/sse v1.0.0 // indirect

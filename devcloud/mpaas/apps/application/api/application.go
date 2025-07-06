@@ -11,15 +11,17 @@ import (
 
 func (h *UserRestfulApiHandler) QueryApplication(r *restful.Request, w *restful.Response) {
 	req := application.NewQueryApplicationRequest()
-	if err := binding.Query.Bind(r.Request, &req.QueryApplicationRequestSpec); err != nil {
-		response.Failed(w, err)
-		return
-	}
 
 	// 过滤条件在认证完成后的上下文中
 	tk := token.GetTokenFromCtx(r.Request.Context())
 	req.ResourceScope = tk.ResourceScope
 	log.L().Debug().Msgf("resource scope: %s", tk.ResourceScope)
+
+	// 用户的参数
+	if err := binding.Query.Bind(r.Request, &req.QueryApplicationRequestSpec); err != nil {
+		response.Failed(w, err)
+		return
+	}
 
 	set, err := h.svc.QueryApplication(r.Request.Context(), req)
 	if err != nil {

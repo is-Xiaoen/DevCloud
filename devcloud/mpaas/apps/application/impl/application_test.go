@@ -12,10 +12,10 @@ func TestCreateApplication(t *testing.T) {
 	req.Description = "应用研发云"
 	req.Type = application.TYPE_SOURCE_CODE
 	req.CodeRepository = application.CodeRepository{
-		SshUrl: "git@122.51.31.227:go-course/go18.git",
+		SshUrl: "git@122.51.31.227:go-course/go17.git",
 	}
 	req.SetNamespaceId(1)
-	req.SetLabel("team", "dev01.web_developer")
+	req.SetLabel("team", "dev01.backend_developer")
 	ins, err := svc.CreateApplication(ctx, req)
 	if err != nil {
 		t.Fatal(err)
@@ -27,7 +27,7 @@ func TestCreateApplication(t *testing.T) {
 func TestQueryApplication(t *testing.T) {
 	req := application.NewQueryApplicationRequest()
 	// dev01.%
-	// req.SetNamespaceId(1)
+	req.SetNamespaceId(1)
 	req.SetScope("team", []string{"dev01%"})
 	// req.SetScope("env", []string{"prod"})
 	ins, err := svc.QueryApplication(ctx, req)
