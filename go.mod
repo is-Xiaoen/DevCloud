@@ -9,12 +9,14 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/infraboard/devops v0.0.6
-	github.com/infraboard/mcube/v2 v2.0.61
-	github.com/infraboard/modules v0.0.13
+	github.com/infraboard/mcube/v2 v2.0.63
+	github.com/infraboard/modules v0.0.20
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.34.0
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/stretchr/testify v1.10.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1138
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/lighthouse v1.0.1134
 	go.mongodb.org/mongo-driver v1.17.3
 	golang.org/x/crypto v0.38.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -80,6 +82,7 @@ require (
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/spf13/cobra v1.9.1 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect

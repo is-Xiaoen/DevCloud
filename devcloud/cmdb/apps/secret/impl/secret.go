@@ -91,8 +91,10 @@ func (s *SecretServiceImpl) SyncResource(ctx context.Context, in *secret.SyncRes
 	// 获取syncer,  执行同步
 	for _, rs := range ins.ResourceType {
 		syncer := secret.GetSyncer(rs)
-		taskInfo := syncer.Sync(ctx, ins, rs)
-		taskSet.Add(taskInfo)
+		for _, region := range ins.Regions {
+			taskInfo := syncer.Sync(ctx, ins, region, rs)
+			taskSet.Add(taskInfo)
+		}
 	}
 	return taskSet, nil
 }

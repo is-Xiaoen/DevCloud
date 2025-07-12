@@ -1,6 +1,7 @@
 package impl_test
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -12,8 +13,8 @@ func TestCreateSecret(t *testing.T) {
 	req := secret.NewCreateSecretRequest()
 	req.Name = "腾讯云只读账号"
 	req.Vendor = resource.VENDOR_TENCENT
-	req.ApiKey = "xxx"
-	req.ApiSecret = "xx"
+	req.ApiKey = os.Getenv("TX_API_KEY")
+	req.ApiSecret = os.Getenv("TX_API_SECRET")
 	req.SetEnabled(true)
 	req.ResourceType = append(req.ResourceType, resource.TYPE_VM)
 	req.Regions = []string{"ap-shanghai", "ap-guangzhou"}
@@ -34,7 +35,7 @@ func TestQuerySecret(t *testing.T) {
 }
 
 const (
-	SECRET_ID = "ed02f7cd-ee5b-33f0-bdf5-e305ecb3efb4"
+	SECRET_ID = "e5aa1ad4-6069-397e-a7ed-a78b9cd2a93b"
 )
 
 func TestDescribeSecret(t *testing.T) {

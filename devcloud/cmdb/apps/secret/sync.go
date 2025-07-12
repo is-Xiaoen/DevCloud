@@ -30,5 +30,5 @@ func RegistrySyncer(t resource.TYPE, s Syncer) {
 
 type Syncer interface {
 	// 资源同步
-	Sync(context.Context, *Secret, resource.TYPE) *task.Task
+	Sync(ctx context.Context, ins *Secret, region string, rt resource.TYPE) *task.Task
 }
