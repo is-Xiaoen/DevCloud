@@ -116,7 +116,7 @@ func TestReadMessage(t *testing.T) {
 		GroupID: "devcloud-go18-audit",
 		// 可以指定Partition消费消息
 		// Partition: 0,
-		Topic:    "audit_go18",
+		Topic:    "task_run_events",
 		MinBytes: 10e3, // 10KB
 		MaxBytes: 10e6, // 10MB
 	})
