@@ -1,0 +1,39 @@
+/* p {
+  color: blue;
+} */
+
+/* . class */
+.red {
+  color: red;
+}
+
+/* # 表示这是一个id选择器 */
+#input01 {
+    width: 400px;
+}
+
+/* ul>li:first-child {
+  font-weight: 600;
+} */
+
+
+ul li:hover {
+  color: red;  
+  font-size: 20px;
+  font-weight: 600;
+}
+
+img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;  /* 裁剪成正方形 */
+  border-radius: 4px; /* 可选：圆角 */
+  margin: 10px;
+}
+
+.img-warppter {
+    height: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

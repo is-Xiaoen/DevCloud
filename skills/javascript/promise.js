@@ -46,7 +46,7 @@ var p1 = new Promise(testApiCall)
 
 
 // 异步等待
-// 一同步编程的方式，来实现异步代码
+// 以同步编程的方式，来实现异步代码
 var async_await = async () => {
     try {
         const resp = await p1
