@@ -29,6 +29,24 @@
     <!-- style="color: red; font-size: 1em;" -->
     <span :style="dynamicStyle">style样式绑定</span>
 
+    <!-- 表单的绑定
+    https://cn.vuejs.org/guide/essentials/forms.html -->
+    <!-- value属性绑定 Model -- View(用户输入框里面的值) -->
+    <!-- input事件绑定 onInput View(用户在界面上的输入) -- Model -->
+    <!-- <input :value="inputValue" @input="inputEventHandler"> -->
+
+    <!-- 做了合并操作, 需要绑定元素的value, 并且监听input事件, 更新value属性的 这种操作
+    给了个 上层封装: v-model -->
+    <input v-model="inputValue">
+
+
+    <!-- 列表渲染 -->
+    <ul>
+      <li v-for="item in items" :key="item.message">
+        {{ item.message }}
+      </li>
+    </ul>
+
   </div>
 </template>
 
@@ -132,5 +150,15 @@ dynamicClass.value.static = false
 // 通过一个style的map
 // css里面的属性 带有 - 需要被转换为驼峰
 const dynamicStyle = ref({ color: 'red', fontSize: '2em' })
+
+// 表单绑定
+const inputValue = ref('')
+// const inputEventHandler = (event) => {
+//   // 用户输入的值，传递给inputValue, 输入框才会显示用户输入的值
+//   inputValue.value = event.target.value
+// }
+
+// 响应式列表
+const items = ref([{ message: 'msg1' }, { message: 'msg2' }, { message: 'msg3' }])
 
 </script>
