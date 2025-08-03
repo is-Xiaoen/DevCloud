@@ -6,16 +6,21 @@
         <h2>欢迎登录</h2>
       </div>
       <a-form :model="form" size="large" @submit="handleSubmit">
-        <a-form-item hide-label field="name" tooltip="Please enter username" label="Username">
-          <a-input v-model="form.name" placeholder="please enter your username...">
+        <a-form-item hide-label field="parameter.username" :rules="{
+          required: true,
+          message: '请输入用户名'
+        }">
+          <a-input v-model="form.parameter.username" placeholder="请输入用户名">
             <template #prefix>
               <icon-user />
             </template>
           </a-input>
         </a-form-item>
-        <a-form-item hide-label field="password" label="Password">
-          <a-input-password :invisible-button="false" v-model="form.password" placeholder="Please enter something"
-            allow-clear>
+        <a-form-item hide-label field="parameter.password" required :rules="{
+          required: true,
+          message: '请输入密码'
+        }">
+          <a-input-password :invisible-button="false" v-model="form.parameter.password" placeholder="请输入密码" allow-clear>
             <template #prefix>
               <icon-lock />
             </template>
@@ -34,18 +39,45 @@
 
 <script setup>
 import { ref } from 'vue';
-
+import mcenter from '@/api/mcenter'
+import token from '@/storage/token'
+import { useRouter } from 'vue-router';
 
 // 表单对象
 const form = ref({
-  name: '',
-  password: '',
+  issuer: 'password',
+  parameter: {
+    username: '',
+    password: ''
+  },
   remember: false,
 })
 
+// 获取router对象
+const router = useRouter()
+
 // 表单的提交
-const handleSubmit = (data) => {
-  console.log(data);
+const handleSubmit = async (data) => {
+  // 判断表单是否验证成功
+  if (data.errors == null) {
+    // 通过HttpClient把数据提交给后端
+    const resp = await mcenter.Login(data.values)
+
+    // 用户登录后，这些用户信息我们怎么保存喃 1. cookie, session storage, localstorage
+    // localStorage.setItem('token', JSON.stringify(resp))
+    // localStorage.getItem('token')
+    // 把 localStorage 做成响应式的
+    // https://cn.vuejs.org/guide/reusability/composables.html
+    token.value = resp
+
+    // 登录完成后，需要跳转到后台页面
+    // location.assign('/users/eduardo')
+    // vue router对象, 提供路由跳转的功能
+    // 字符串路径
+    //  router.push('/users/eduardo')
+    // 指定到组件名称
+    router.push({ name: 'HomePage' })
+  }
 }
 
 </script>

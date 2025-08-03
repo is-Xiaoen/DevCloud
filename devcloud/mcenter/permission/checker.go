@@ -78,28 +78,31 @@ func (c *Checker) Check(r *restful.Request, w *restful.Response, next *restful.F
 	// 1. 知道用户当前访问的是哪个接口, 当前url 匹配到的路由是哪个
 	// SelectedRoute, 它可以返回当前URL适配哪个路有， RouteReader
 	// 封装了一个函数 来获取Meta信息 NewEntryFromRestRouteReader
-	route := endpoint.NewEntryFromRestRouteReader(r.SelectedRoute())
-	if route.RequiredAuth {
-		// 校验身份
-		tk, err := c.CheckToken(r)
-		if err != nil {
-			response.Failed(w, err)
-			return
+	sr := r.SelectedRoute()
+	if sr != nil {
+		route := endpoint.NewEntryFromRestRouteReader(sr)
+		if route.RequiredAuth {
+			// 校验身份
+			tk, err := c.CheckToken(r)
+			if err != nil {
+				response.Failed(w, err)
+				return
+			}
+
+			// 校验权限
+			if err := c.CheckPolicy(r, tk, route); err != nil {
+				response.Failed(w, err)
+				return
+			}
+
+			// 如果校验成功，需要把 用户的身份信息，放到请求的上下文中，方便后面的逻辑获取
+			// context.WithValue 来往ctx 添加 value
+			// key: value, value token对象
+			ctx := context.WithValue(r.Request.Context(), token.CTX_TOKEN_KEY, tk)
+
+			// ctx 生成一个新的，继续往下传递
+			r.Request = r.Request.WithContext(ctx)
 		}
-
-		// 校验权限
-		if err := c.CheckPolicy(r, tk, route); err != nil {
-			response.Failed(w, err)
-			return
-		}
-
-		// 如果校验成功，需要把 用户的身份信息，放到请求的上下文中，方便后面的逻辑获取
-		// context.WithValue 来往ctx 添加 value
-		// key: value, value token对象
-		ctx := context.WithValue(r.Request.Context(), token.CTX_TOKEN_KEY, tk)
-
-		// ctx 生成一个新的，继续往下传递
-		r.Request = r.Request.WithContext(ctx)
 	}
 
 	// 请求处理
