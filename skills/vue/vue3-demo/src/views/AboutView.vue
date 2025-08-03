@@ -47,6 +47,10 @@
       </li>
     </ul>
 
+
+    <!-- 自定义组件 -->
+    <MyComponent v-model="my_message" />
+
   </div>
 </template>
 
@@ -64,6 +68,8 @@
 <!-- vue组件里面 js逻辑部份 -->
 <script setup>
 import { computed, nextTick, onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref } from 'vue';
+
+import MyComponent from '@/components/MyComponent.vue';
 
 // 声明响应式变量, reactive, ref
 // {value: 'my vue3 demo'}
@@ -161,4 +167,7 @@ const inputValue = ref('')
 // 响应式列表
 const items = ref([{ message: 'msg1' }, { message: 'msg2' }, { message: 'msg3' }])
 
+
+// 组件属性 动态绑定
+const my_message = ref('go19')
 </script>
