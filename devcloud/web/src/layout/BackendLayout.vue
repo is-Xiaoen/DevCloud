@@ -89,9 +89,11 @@
           </div>
 
           <!-- 主内容区 -->
-          <main class="router-view-wrapper">
-            <router-view />
-          </main>
+          <a-watermark content="arco.design" :font="{ color: 'rgba(0, 0, 0, 0.06)' }">
+            <main class="router-view-wrapper">
+              <router-view />
+            </main>
+          </a-watermark>
 
           <!-- 页脚（会随内容滚动） -->
           <footer class="layout-footer">
@@ -347,7 +349,7 @@ const toggleSidebar = () => {
 /* 路由视图容器 */
 .router-view-wrapper {
   flex: 1;
-  padding: 0 24px;
+  padding: 0px 20px 0px 40px;
   min-height: calc(100vh - 180px);
   /* 动态计算最小高度 */
 }
