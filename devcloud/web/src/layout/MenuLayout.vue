@@ -5,63 +5,21 @@
     <div class="decoration-circle circle-2"></div>
     <div class="decoration-wave"></div>
 
-    <!-- 固定顶部导航栏 -->
-    <div class="fixed-header">
-      <div class="header-content">
-        <div class="logo-section">
-          <h1 class="platform-name">研发交付平台</h1>
-        </div>
-        <div class="main-nav-section">
-          <a-menu mode="horizontal" :default-selected-keys="['1']">
-            <a-menu-item key="1">工作台</a-menu-item>
-            <a-menu-item key="2">项目管理</a-menu-item>
-            <a-menu-item key="3">研发交付</a-menu-item>
-            <a-menu-item key="4">制品库</a-menu-item>
-            <a-menu-item key="5">测试中心</a-menu-item>
-            <a-menu-item key="6">运维中心</a-menu-item>
-          </a-menu>
-        </div>
-        <div class="user-section">
-          <a-dropdown position="bottom">
-            <a-avatar :size="32" class="user-avatar">
-              <icon-user />
-            </a-avatar>
-            <template #content>
-              <a-doption>个人中心</a-doption>
-              <a-doption>系统设置</a-doption>
-              <a-doption>退出登录</a-doption>
-            </template>
-          </a-dropdown>
-        </div>
-      </div>
-    </div>
+    <!-- 使用新的顶部导航组件 -->
+    <HeaderNav :active-key="activeMenuKey" @menu-change="handleMenuChange" @user-option-click="handleUserOption" />
 
     <!-- 主内容区 -->
     <div class="main-content-wrapper">
       <!-- 可收缩侧边栏 -->
       <div class="fixed-sidebar" :class="{ 'collapsed': isSidebarCollapsed }">
         <!-- 使用原生a-menu确保折叠效果 -->
-        <a-menu :theme="light" :default-selected-keys="['1']" :collapsed="isSidebarCollapsed" :collapsed-width="64"
+        <a-menu theme="light" :default-selected-keys="['1']" :collapsed="isSidebarCollapsed" :collapsed-width="64"
           :style="{ width: '100%', height: '100%' }">
-          <a-menu-item key="1">
-            <template #icon><icon-dashboard /></template>
-            <span class="menu-title">流水线列表</span>
-          </a-menu-item>
-          <a-menu-item key="2">
-            <template #icon><icon-branch /></template>
-            <span class="menu-title">分支管理</span>
-          </a-menu-item>
-          <a-menu-item key="3">
-            <template #icon><icon-history /></template>
-            <span class="menu-title">执行历史</span>
-          </a-menu-item>
-          <a-menu-item key="4">
-            <template #icon><icon-settings /></template>
-            <span class="menu-title">流水线模板</span>
-          </a-menu-item>
-          <a-menu-item key="5">
-            <template #icon><icon-monitor /></template>
-            <span class="menu-title">监控中心</span>
+          <a-menu-item v-for="menu in currentMenus" :key="menu.key">
+            <template #icon>
+              <component :is="menu.icon"></component>
+            </template>
+            <span class="menu-title">{{ menu.title }}</span>
           </a-menu-item>
         </a-menu>
 
@@ -89,7 +47,7 @@
           </div>
 
           <!-- 主内容区 -->
-          <a-watermark content="arco.design" :font="{ color: 'rgba(0, 0, 0, 0.06)' }">
+          <a-watermark :content="token.user_name" :font="{ color: 'rgba(0, 0, 0, 0.06)' }">
             <main class="router-view-wrapper">
               <router-view />
             </main>
@@ -106,13 +64,86 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref, shallowReactive } from 'vue';
+import HeaderNav from './components/HeaderNav.vue';
+import { useRouter } from 'vue-router';
+import { IconApps, IconBranch, IconHistory, IconSettings, IconTags } from '@arco-design/web-vue/es/icon';
+import token from '@/storage/token'
+
+const router = useRouter()
 
 const isSidebarCollapsed = ref(false);
+const activeMenuKey = ref('ProjectSystem');
 
 const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
 };
+
+const handleMenuChange = (key) => {
+  activeMenuKey.value = key;
+  router.push({ name: key })
+  // 这里可以添加路由跳转逻辑
+  console.log('菜单切换:', key);
+};
+
+const handleUserOption = (option) => {
+  console.log('用户操作:', option);
+  // 根据不同的option执行不同的操作
+  switch (option) {
+    case 'profile':
+      // 跳转到个人中心
+      break;
+    case 'settings':
+      // 跳转到系统设置
+      break;
+    case 'logout':
+      // 执行退出登录
+      break;
+  }
+};
+
+const currentMenus = computed(() => {
+  return systemMenus[activeMenuKey.value]
+})
+
+const systemMenus = shallowReactive({
+  ProjectSystem: [
+    {
+      key: '1',
+      icon: IconApps,
+      title: '应用管理'
+    },
+  ],
+  DevelopSystem: [
+    {
+      key: '1',
+      icon: IconTags,
+      title: '版本迭代'
+    },
+    {
+      key: '2',
+      icon: IconBranch,
+      title: '分支管理'
+    },
+    {
+      key: '3',
+      icon: IconHistory,
+      title: '执行历史'
+    },
+    {
+      key: '4',
+      icon: IconSettings,
+      title: '流水线模板'
+    },
+    {
+      key: '5',
+      title: '监控中心'
+    }
+  ]
+})
+
+
+
 </script>
 
 <style lang="less" scoped>

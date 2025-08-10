@@ -1,35 +1,74 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import BackendLayout from '@/layout/BackendLayout.vue'
+import MenuLayout from '@/layout/MenuLayout.vue'
+import DashboardLayout from '@/layout/DashboardLayout.vue'
+import FrontendLayout from '@/layout/FrontendLayout.vue'
+import { beforeEach } from './interceptor'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'HomePage',
-      component: BackendLayout,
+      name: 'Frontend',
+      redirect: { name: 'ProductPage' },
+      component: () => FrontendLayout,
+      children: [
+        {
+          path: 'product',
+          name: 'ProductPage',
+          component: () => import('@/pages/frontend/ProductPage.vue'),
+        },
+      ],
     },
     {
       path: '/login',
       name: 'LoginPage',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../pages/LoginPage.vue'),
+      component: () => import('@/pages/LoginPage.vue'),
     },
     {
-      path: '/cmdb',
-      component: () => import('@/layout/BackendLayout.vue'),
+      path: '/person',
+      name: 'DashBoard',
+      redirect: { name: 'DashboardPage' },
+      component: DashboardLayout,
       children: [
         {
-          path: 'secret',
-          name: 'SecretPage',
-          component: () => import('@/pages/cmdb/SecretPage.vue'),
+          path: 'dashboard',
+          name: 'DashboardPage',
+          component: () => import('@/pages/dashboard/DashboardPage.vue'),
+        },
+      ],
+    },
+    {
+      path: '/project',
+      name: 'ProjectSystem',
+      redirect: { name: 'AppPage' },
+      component: MenuLayout,
+      children: [
+        {
+          path: 'app',
+          name: 'AppPage',
+          component: () => import('@/pages/project/AppPage.vue'),
+        },
+      ],
+    },
+    {
+      path: '/develop',
+      name: 'DevelopSystem',
+      redirect: { name: 'SprintPage' },
+      component: MenuLayout,
+      children: [
+        {
+          path: 'sprint',
+          name: 'SprintPage',
+          component: () => import('@/pages/develop/SprintPage.vue'),
         },
       ],
     },
   ],
 })
+
+// 导航守卫
+router.beforeEach(beforeEach)
 
 export default router

@@ -93,7 +93,7 @@ const handleSubmit = async (data) => {
   if (data.errors == null) {
     const resp = await mcenter.Login(data.values);
     token.value = resp;
-    router.push({ name: 'HomePage' });
+    router.push({ name: 'DashBoard' });
   }
 };
 </script>
