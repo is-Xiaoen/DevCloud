@@ -29,16 +29,7 @@
       <a-row :gutter="20">
         <!-- 构建状态图表 -->
         <a-col :xs="24" :md="16">
-          <a-card title="构建状态统计" :bordered="false" class="chart-card">
-            <template #extra>
-              <a-select v-model="buildTimeRange" size="small" style="width: 120px">
-                <a-option value="week">最近一周</a-option>
-                <a-option value="month">最近一月</a-option>
-                <a-option value="quarter">最近三月</a-option>
-              </a-select>
-            </template>
-            <BuildStatusChar :data="buildData" />
-          </a-card>
+          <BuildStatusChar />
         </a-col>
 
         <!-- 活动流水线 -->
@@ -76,9 +67,7 @@
       <a-row :gutter="20">
         <!-- 部署统计 -->
         <a-col :xs="24" :md="12">
-          <a-card title="部署统计" :bordered="false" class="chart-card">
-            <DeployChart :data="deployData" />
-          </a-card>
+          <DeployChart />
         </a-col>
 
         <!-- 最近活动 -->
@@ -116,11 +105,6 @@ import {
 
 import DeployChart from './components/DeployChart.vue';
 import BuildStatusChar from './components/BuildStatusChar.vue';
-
-
-
-// 数据
-const buildTimeRange = ref('week');
 
 const metrics = ref([
   {
@@ -189,7 +173,7 @@ const activePipelines = ref([
   {
     id: '2354',
     name: 'mobile-app',
-    status: 'error',
+    status: 'danger',
     duration: '3m 28s',
     stage: '构建失败',
     tagColor: 'red'
@@ -203,9 +187,6 @@ const activePipelines = ref([
     tagColor: 'gold'
   }
 ]);
-
-const buildData = ref({/* 图表数据 */ });
-const deployData = ref({/* 图表数据 */ });
 
 const recentActivities = ref([
   {
