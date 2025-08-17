@@ -49,6 +49,7 @@ func NewQueryLabelRequest() *QueryLabelRequest {
 
 type QueryLabelRequest struct {
 	*request.PageRequest
+	Key string `json:"key" form:"key"`
 }
 
 type DescribeLabelRequest struct {

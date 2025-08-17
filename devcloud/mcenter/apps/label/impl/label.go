@@ -30,6 +30,11 @@ func (i *LabelServiceImpl) QueryLabel(ctx context.Context, in *label.QueryLabelR
 	set := types.New[*label.Label]()
 
 	query := datasource.DBFromCtx(ctx).Model(&label.Label{})
+
+	if in.Key != "" {
+		query = query.Where("`key` = ?", in.Key)
+	}
+
 	err := query.Count(&set.Total).Error
 	if err != nil {
 		return nil, err

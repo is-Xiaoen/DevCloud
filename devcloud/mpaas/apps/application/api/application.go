@@ -31,3 +31,41 @@ func (h *UserRestfulApiHandler) QueryApplication(r *restful.Request, w *restful.
 
 	response.Success(w, set)
 }
+
+func (h *UserRestfulApiHandler) CreateApplication(r *restful.Request, w *restful.Response) {
+	req := application.NewCreateApplicationRequest()
+	if err := r.ReadEntity(req); err != nil {
+		response.Failed(w, err)
+		return
+	}
+
+	// 过滤条件在认证完成后的上下文中
+	tk := token.GetTokenFromCtx(r.Request.Context())
+	req.SetNamespaceId(*tk.NamespaceId)
+	req.CreateBy = tk.UserName
+
+	set, err := h.svc.CreateApplication(r.Request.Context(), req)
+	if err != nil {
+		response.Failed(w, err)
+		return
+	}
+
+	response.Success(w, set)
+}
+
+func (h *UserRestfulApiHandler) DeleteApplication(r *restful.Request, w *restful.Response) {
+	req := application.NewDeleteApplicationRequest(r.PathParameter("id"))
+
+	// 过滤条件在认证完成后的上下文中
+	tk := token.GetTokenFromCtx(r.Request.Context())
+	req.ResourceScope = tk.ResourceScope
+	log.L().Debug().Msgf("resource scope: %s", tk.ResourceScope)
+
+	set, err := h.svc.DeleteApplication(r.Request.Context(), req)
+	if err != nil {
+		response.Failed(w, err)
+		return
+	}
+
+	response.Success(w, set)
+}

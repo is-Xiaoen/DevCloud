@@ -29,6 +29,7 @@ func TestQueryApplication(t *testing.T) {
 	// dev01.%
 	req.SetNamespaceId(1)
 	req.SetScope("team", []string{"dev01%"})
+	req.Keywords = "dev01"
 	// req.SetScope("env", []string{"prod"})
 	ins, err := svc.QueryApplication(ctx, req)
 	if err != nil {

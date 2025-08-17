@@ -29,6 +29,7 @@ func TestCreateLabel(t *testing.T) {
 
 func TestQueryLabel(t *testing.T) {
 	req := label.NewQueryLabelRequest()
+	req.Key = "team"
 	set, err := svc.QueryLabel(ctx, req)
 	if err != nil {
 		t.Fatal(err)

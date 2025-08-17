@@ -46,11 +46,13 @@ type QueryApplicationRequest struct {
 type QueryApplicationRequestSpec struct {
 	*request.PageRequest
 	// 应用ID
-	Id string `json:"id" bson:"_id"`
+	Id string `json:"id" form:"id"`
 	// 应用名称
-	Name string `json:"name" bson:"name"`
+	Name string `json:"name" form:"name"`
 	// 应用是否就绪
-	Ready *bool `json:"ready" bson:"ready"`
+	Ready *bool `json:"ready" form:"ready"`
+	// 关键字
+	Keywords string `json:"keywords" form:"keywords"`
 }
 
 type UpdateApplicationRequest struct {
@@ -60,8 +62,20 @@ type UpdateApplicationRequest struct {
 	CreateApplicationSpec
 }
 
+func NewDeleteApplicationRequest(appId string) *DeleteApplicationRequest {
+	return &DeleteApplicationRequest{
+		DescribeApplicationRequest: *NewDescribeApplicationRequest(appId),
+	}
+}
+
 type DeleteApplicationRequest struct {
 	DescribeApplicationRequest
+}
+
+func NewDescribeApplicationRequest(appId string) *DescribeApplicationRequest {
+	return &DescribeApplicationRequest{
+		Id: appId,
+	}
 }
 
 type DescribeApplicationRequest struct {

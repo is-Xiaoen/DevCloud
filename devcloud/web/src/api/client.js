@@ -4,7 +4,7 @@ import { Message } from '@arco-design/web-vue'
 // 封装一个axios的实例，http cient实例
 // https://axios-http.com/zh/docs/instance
 const client = axios.create({
-  timeout: 3000,
+  timeout: 5000,
 })
 
 // 拦截API的返回结果, 如果是异常 提取异常信息，并展示

@@ -31,6 +31,18 @@ func (h *UserRestfulApiHandler) Init() error {
 
 	tags := []string{"应用管理"}
 	ws := gorestful.ObjectRouter(h)
+
+	ws.Route(ws.POST("").To(h.CreateApplication).
+		Doc("应用创建").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(permission.Auth(true)).
+		Metadata(permission.Permission(true)).
+		Metadata(permission.Resource("application")).
+		Metadata(permission.Action("create")).
+		Metadata(audit.Enable(true)).
+		Writes(application.Application{}).
+		Returns(200, "OK", application.Application{}))
+
 	// required_auth=true/false
 	ws.Route(ws.GET("").To(h.QueryApplication).
 		Doc("应用列表查询").
@@ -46,6 +58,17 @@ func (h *UserRestfulApiHandler) Init() error {
 		Param(restful.QueryParameter("page_number", "页码").DataType("integer")).
 		Writes(Set{}).
 		Returns(200, "OK", Set{}))
+
+	ws.Route(ws.DELETE("/{id}").To(h.DeleteApplication).
+		Doc("应用删除").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(permission.Auth(true)).
+		Metadata(permission.Permission(true)).
+		Metadata(permission.Resource("application")).
+		Metadata(permission.Action("delete")).
+		Metadata(audit.Enable(true)).
+		Writes().
+		Returns(200, "OK", nil))
 
 	return nil
 }

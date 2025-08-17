@@ -40,6 +40,9 @@ func (i *ApplicationServiceImpl) QueryApplication(ctx context.Context, in *appli
 	if in.Ready != nil {
 		query = query.Where("ready = ?", *in.Ready)
 	}
+	if in.Keywords != "" {
+		query = query.Where("name LIKE ?", "%"+in.Keywords+"%")
+	}
 
 	err := query.Count(&set.Total).Error
 	if err != nil {
