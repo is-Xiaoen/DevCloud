@@ -5,7 +5,7 @@
         <h1 class="platform-name">研发交付平台</h1>
       </div>
       <div class="main-nav-section">
-        <a-menu mode="horizontal" :default-selected-keys="[activeKey]">
+        <a-menu mode="horizontal" :default-selected-keys="[app.current_system]">
           <a-menu-item v-for="item in menuItems" :key="item.key" @click="handleMenuClick(item)">
             {{ item.label }}
           </a-menu-item>
@@ -30,23 +30,18 @@
 <script setup>
 import { ref } from 'vue';
 import token from '@/storage/token'
+import app from '@/storage/app'
 import { useRouter } from 'vue-router';
 
-defineProps({
-  activeKey: {
-    type: String,
-    default: 'HomePage'
-  }
-});
 
 const router = useRouter()
-const emit = defineEmits(['menu-change', 'user-option-click']);
+const emit = defineEmits(['system-change', 'user-option-click']);
 
 const menuItems = ref([
   { key: 'DashBoard', label: '工作台' },
   { key: 'ProjectSystem', label: '项目管理' },
   { key: 'DevelopSystem', label: '研发交付' },
-  { key: '4', label: '制品库' },
+  { key: 'ArtifactSystem', label: '制品库' },
   { key: '5', label: '测试中心' },
   { key: '6', label: '运维中心' }
 ]);
@@ -64,7 +59,8 @@ const userOptions = ref([
 ]);
 
 const handleMenuClick = (menuItem) => {
-  emit('menu-change', menuItem.key);
+  app.value.current_system = menuItem.key
+  emit('system-change', menuItem.key);
 };
 </script>
 
@@ -76,7 +72,7 @@ const handleMenuClick = (menuItem) => {
   right: 0;
   height: 60px;
   background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--color-border);
   z-index: 100;
 
   .header-content {

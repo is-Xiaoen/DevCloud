@@ -6,7 +6,7 @@
     <div class="decoration-wave"></div>
 
     <!-- 使用顶部导航组件 -->
-    <HeaderNav :active-key="activeMenuKey" @menu-change="handleMenuChange" @user-option-click="handleUserOption" />
+    <HeaderNav @system-change="handleSystemChange" @user-option-click="handleUserOption" />
 
     <!-- 主内容区 -->
     <div class="main-content-wrapper">
@@ -31,20 +31,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import HeaderNav from './components/HeaderNav.vue';
 import { useRouter } from 'vue-router';
 import token from '@/storage/token'
 
 const router = useRouter()
 
-const activeMenuKey = ref('DashBoard');
 
-const handleMenuChange = (key) => {
-  activeMenuKey.value = key;
-  router.push({ name: key })
+const handleSystemChange = (system) => {
   // 这里可以添加路由跳转逻辑
-  console.log('菜单切换:', key);
+  console.log('菜单切换:', system);
+
+  router.push({ name: system })
 };
 
 const handleUserOption = (option) => {

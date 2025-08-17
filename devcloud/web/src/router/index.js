@@ -39,29 +39,87 @@ const router = createRouter({
         },
       ],
     },
+    // 项目管理
     {
       path: '/project',
       name: 'ProjectSystem',
-      redirect: { name: 'AppPage' },
+      redirect: { name: 'ProjectList' },
       component: MenuLayout,
+      meta: {
+        title: '项目管理',
+      },
       children: [
         {
-          path: 'app',
-          name: 'AppPage',
-          component: () => import('@/pages/project/AppPage.vue'),
+          path: 'list',
+          name: 'ProjectList',
+          component: () => import('@/pages/project/ProjectList.vue'),
+          meta: {
+            title: '项目空间',
+          },
         },
       ],
     },
+    // 研发交付
     {
       path: '/develop',
       name: 'DevelopSystem',
       redirect: { name: 'SprintPage' },
       component: MenuLayout,
+      meta: {
+        title: '研发交付',
+      },
       children: [
         {
-          path: 'sprint',
-          name: 'SprintPage',
-          component: () => import('@/pages/develop/SprintPage.vue'),
+          path: 'app',
+          name: 'AppPage',
+          component: () => import('@/pages/develop/AppPage.vue'),
+          meta: {
+            title: '应用管理',
+          },
+        },
+        {
+          path: 'version_iteration',
+          name: 'VersionIteration',
+          component: () => import('@/pages/develop/VersionIteration.vue'),
+          meta: {
+            title: '版本迭代',
+          },
+        },
+        {
+          path: 'pipeline_template',
+          name: 'PipelineTemplate',
+          component: () => import('@/pages/develop/PipelineTemplate.vue'),
+          meta: {
+            title: '流水线模板',
+          },
+        },
+      ],
+    },
+    // 制品库
+    {
+      path: '/artifact',
+      name: 'ArtifactSystem',
+      redirect: { name: 'SprintPage' },
+      component: MenuLayout,
+      meta: {
+        title: '制品库',
+      },
+      children: [
+        {
+          path: 'registry',
+          name: 'RegistryPage',
+          component: () => import('@/pages/artifact/RegistryPage.vue'),
+          meta: {
+            title: '制品仓库',
+          },
+        },
+        {
+          path: 'asset',
+          name: 'AssetPage',
+          component: () => import('@/pages/artifact/AssetPage.vue'),
+          meta: {
+            title: '制品管理',
+          },
         },
       ],
     },

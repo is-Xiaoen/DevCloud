@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import {
   IconCheckCircle,
   IconClockCircle,
@@ -106,7 +106,7 @@ import {
 import DeployChart from './components/DeployChart.vue';
 import BuildStatusChar from './components/BuildStatusChar.vue';
 
-const metrics = ref([
+const metrics = shallowRef([
   {
     title: '成功构建',
     value: '1,248',

@@ -6,14 +6,15 @@
     <div class="decoration-wave"></div>
 
     <!-- 使用新的顶部导航组件 -->
-    <HeaderNav :active-key="activeMenuKey" @menu-change="handleMenuChange" @user-option-click="handleUserOption" />
+    <HeaderNav @system-change="handleSystemChange" @user-option-click="handleUserOption" />
 
     <!-- 主内容区 -->
     <div class="main-content-wrapper">
       <!-- 可收缩侧边栏 -->
       <div class="fixed-sidebar" :class="{ 'collapsed': isSidebarCollapsed }">
         <!-- 使用原生a-menu确保折叠效果 -->
-        <a-menu theme="light" :default-selected-keys="['1']" :collapsed="isSidebarCollapsed" :collapsed-width="64"
+        <a-menu theme="light" :selected-keys="[currentSelectMenuItem]" :collapsed="isSidebarCollapsed"
+          :collapsed-width="64" @sub-menu-click="handleMenuClick" @menu-item-click="handleMenuItemClick" breakpoint="xl"
           :style="{ width: '100%', height: '100%' }">
           <a-menu-item v-for="menu in currentMenus" :key="menu.key">
             <template #icon>
@@ -40,9 +41,7 @@
           <!-- 面包屑（会随内容滚动） -->
           <div class="breadcrumb">
             <a-breadcrumb>
-              <a-breadcrumb-item>首页</a-breadcrumb-item>
-              <a-breadcrumb-item>流水线系统</a-breadcrumb-item>
-              <a-breadcrumb-item>流水线列表</a-breadcrumb-item>
+              <a-breadcrumb-item v-for="m in $route.matched" :key="m.name">{{ m.meta.title }}</a-breadcrumb-item>
             </a-breadcrumb>
           </div>
 
@@ -66,25 +65,57 @@
 <script setup>
 import { computed, ref, shallowReactive } from 'vue';
 import HeaderNav from './components/HeaderNav.vue';
-import { useRouter } from 'vue-router';
-import { IconApps, IconBranch, IconHistory, IconSettings, IconTags } from '@arco-design/web-vue/es/icon';
+import { useRoute, useRouter } from 'vue-router';
+import { useWindowSize } from '@vueuse/core'
+import { IconApps, IconBranch, IconLock, IconSettings, IconTags } from '@arco-design/web-vue/es/icon';
 import token from '@/storage/token'
+import app from '@/storage/app'
+import { watch } from 'vue';
 
 const router = useRouter()
+const route = useRoute()
 
 const isSidebarCollapsed = ref(false);
-const activeMenuKey = ref('ProjectSystem');
 
 const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
 };
 
-const handleMenuChange = (key) => {
-  activeMenuKey.value = key;
-  router.push({ name: key })
+// 侧边栏响应式
+const { width } = useWindowSize()
+watch(width, (newWidth) => {
+  isSidebarCollapsed.value = newWidth < 1200; // 小于1200px时自动折叠
+}, { immediate: true });
+
+const currentSelectMenuItem = computed(() => {
+  return app.value.current_menu[app.value.current_system]?.menu_item || app.value.current_system
+})
+
+const handleSystemChange = (system) => {
   // 这里可以添加路由跳转逻辑
-  console.log('菜单切换:', key);
+  console.log('菜单切换:', system);
+
+  // 跳转到当前选中的页面
+  try {
+    router.push({ name: currentSelectMenuItem.value })
+  } catch (error) {
+    console.log("swich system error, %s", error)
+    router.push({ name: app.value.current_system })
+  }
 };
+
+// 菜单被选中
+const handleMenuClick = (key) => {
+  app.value.current_menu
+  console.log(key)
+}
+
+// 菜单项被选中
+const handleMenuItemClick = (key) => {
+  app.value.current_menu[app.value.current_system].menu_item = key
+  router.push({ name: key })
+  console.log(route)
+}
 
 const handleUserOption = (option) => {
   console.log('用户操作:', option);
@@ -103,44 +134,49 @@ const handleUserOption = (option) => {
 };
 
 const currentMenus = computed(() => {
-  return systemMenus[activeMenuKey.value]
+  return systemMenus[app.value.current_system]
 })
 
 const systemMenus = shallowReactive({
   ProjectSystem: [
     {
-      key: '1',
-      icon: IconApps,
-      title: '应用管理'
+      key: 'ProjectList',
+      icon: IconLock,
+      title: '项目空间'
     },
   ],
   DevelopSystem: [
     {
-      key: '1',
+      key: 'AppPage',
+      icon: IconApps,
+      title: '应用管理'
+    },
+    {
+      key: 'VersionIteration',
       icon: IconTags,
       title: '版本迭代'
     },
     {
-      key: '2',
-      icon: IconBranch,
-      title: '分支管理'
-    },
-    {
-      key: '3',
-      icon: IconHistory,
-      title: '执行历史'
-    },
-    {
-      key: '4',
+      key: 'PipelineTemplate',
       icon: IconSettings,
       title: '流水线模板'
+    }
+  ],
+  ArtifactSystem: [
+    {
+      key: 'RegistryPage',
+      icon: IconTags,
+      title: '制品仓库'
     },
     {
-      key: '5',
-      title: '监控中心'
-    }
+      key: 'AssetPage',
+      icon: IconBranch,
+      title: '制品管理'
+    },
   ]
 })
+
+
 
 
 
@@ -195,7 +231,7 @@ const systemMenus = shallowReactive({
   right: 0;
   height: 60px;
   background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--color-border);
   z-index: 100;
 
   .header-content {
@@ -258,6 +294,7 @@ const systemMenus = shallowReactive({
   bottom: 0;
   width: 220px;
   background-color: var(--color-bg-2);
+  border-right: 1px solid var(--color-border);
   z-index: 90;
   transition: width 0.3s ease;
 
