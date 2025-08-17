@@ -115,14 +115,14 @@ const doDeleteApp = async (app) => {
   try {
     deleteAppLoading.value = true;
     await API.mpaas.AppDelete(app.id);
-    fetchAppList();
+
   } catch (error) {
     console.error('Error deleting app:', error);
   } finally {
     deleteAppLoading.value = false;
   }
 }
-const deleteApp = (app) => {
-  doDeleteApp(app);
+const deleteApp = () => {
+  fetchAppList();
 };
 </script>
