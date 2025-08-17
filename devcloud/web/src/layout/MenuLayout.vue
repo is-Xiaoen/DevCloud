@@ -418,7 +418,7 @@ const systemMenus = shallowReactive({
 .router-view-wrapper {
   flex: 1;
   padding: 0px 20px 0px 40px;
-  min-height: calc(100vh - 180px);
+  // min-height: calc(100vh - 180px);
   /* 动态计算最小高度 */
 }
 

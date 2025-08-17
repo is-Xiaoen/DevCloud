@@ -134,7 +134,7 @@ const handleUserOption = (option) => {
 .router-view-wrapper {
   flex: 1;
   padding: 20px;
-  min-height: calc(100vh - 180px);
+  // min-height: calc(100vh - 180px);
   /* 调整最小高度 */
 }
 

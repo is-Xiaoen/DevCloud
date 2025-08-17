@@ -1,7 +1,7 @@
 [app]
   name = "devcloud"
   description = "app desc"
-  address = "http://127.0.0.1:8080"
+  address = "http://localhost:8080"
   encrypt_key = "defualt app encrypt key"
 
 [datasource]

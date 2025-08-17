@@ -90,7 +90,7 @@ const formatDate = (timestamp) => {
   margin-bottom: 16px;
   border-radius: 4px;
   transition: all 0.2s;
-  height: 220px;
+  height: 260px;
 }
 
 .project-card:hover {
