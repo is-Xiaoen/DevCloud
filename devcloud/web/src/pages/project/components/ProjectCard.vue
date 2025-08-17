@@ -1,10 +1,10 @@
 <template>
-  <a-card class="project-card" :style="{ borderTop: `4px solid ${statusColor}` }" hoverable>
+  <a-card class="project-card" hoverable>
     <a-card-meta :title="project.name">
       <template #description>
         <div class="project-meta">
           <div class="project-desc">{{ project.description }}</div>
-
+          <div class="project-desc">状态: {{ project.status }}</div>
           <div class="project-footer">
             <a-space>
               <a-avatar-group :max-count="3">
@@ -47,14 +47,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { } from 'vue';
 import {
   IconEdit,
   IconDelete,
   IconMore
 } from '@arco-design/web-vue/es/icon';
 
-const props = defineProps({
+defineProps({
   project: {
     type: Object,
     required: true,
@@ -71,14 +71,14 @@ const props = defineProps({
 
 defineEmits(['edit', 'delete', 'archive']);
 
-const statusColor = computed(() => {
-  const map = {
-    active: '#00B42A',
-    archived: '#86909C',
-    planning: '#FF7D00'
-  };
-  return map[props.project.status] || '#86909C';
-});
+// const statusColor = computed(() => {
+//   const map = {
+//     active: '#00B42A',
+//     archived: '#86909C',
+//     planning: '#FF7D00'
+//   };
+//   return map[props.project.status] || '#86909C';
+// });
 
 const formatDate = (timestamp) => {
   return new Date(timestamp).toLocaleDateString('zh-CN');
@@ -90,7 +90,7 @@ const formatDate = (timestamp) => {
   margin-bottom: 16px;
   border-radius: 4px;
   transition: all 0.2s;
-  height: 100%;
+  height: 220px;
 }
 
 .project-card:hover {

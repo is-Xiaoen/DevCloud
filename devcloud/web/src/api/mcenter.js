@@ -1,9 +1,9 @@
 import client from './client'
 
-var API = {
+var MCENTER_API = {
   Login: (data) => {
     return client.post('/api/devcloud/v1/token', data)
   },
 }
 
-export default API
+export default MCENTER_API

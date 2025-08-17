@@ -74,7 +74,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import mcenter from '@/api/mcenter'
+import API from '@/api'
 import token from '@/storage/token'
 import { useRouter } from 'vue-router';
 
@@ -91,7 +91,7 @@ const router = useRouter();
 
 const handleSubmit = async (data) => {
   if (data.errors == null) {
-    const resp = await mcenter.Login(data.values);
+    const resp = await API.mcenter.Login(data.values);
     token.value = resp;
     router.push({ name: 'DashBoard' });
   }
