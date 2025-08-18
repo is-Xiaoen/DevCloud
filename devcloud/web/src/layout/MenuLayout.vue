@@ -63,11 +63,10 @@
 </template>
 
 <script setup>
-import { computed, ref, shallowReactive } from 'vue';
+import { computed, ref } from 'vue';
 import HeaderNav from './components/HeaderNav.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useWindowSize } from '@vueuse/core'
-import { IconApps, IconBranch, IconLock, IconSettings, IconTags } from '@arco-design/web-vue/es/icon';
 import token from '@/storage/token'
 import app from '@/storage/app'
 import { watch } from 'vue';
@@ -88,7 +87,7 @@ watch(width, (newWidth) => {
 }, { immediate: true });
 
 const currentSelectMenuItem = computed(() => {
-  return app.value.current_menu[app.value.current_system]?.menu_item || app.value.current_system
+  return app.value.system_menu.find(item => item.key === app.value.current_system)?.current_menu_item || app.value.current_system
 })
 
 const handleSystemChange = (system) => {
@@ -106,13 +105,13 @@ const handleSystemChange = (system) => {
 
 // 菜单被选中
 const handleMenuClick = (key) => {
-  app.value.current_menu
+  app.value.system_menu.find(item => item.key === app.value.current_system).current_menu_item = key
   console.log(key)
 }
 
 // 菜单项被选中
 const handleMenuItemClick = (key) => {
-  app.value.current_menu[app.value.current_system].menu_item = key
+  app.value.system_menu.find(item => item.key === app.value.current_system).current_menu_item = key
   router.push({ name: key })
   console.log(route)
 }
@@ -134,51 +133,8 @@ const handleUserOption = (option) => {
 };
 
 const currentMenus = computed(() => {
-  return systemMenus[app.value.current_system]
+  return app.value.system_menu.find(item => item.key === app.value.current_system)?.menus || []
 })
-
-const systemMenus = shallowReactive({
-  ProjectSystem: [
-    {
-      key: 'ProjectList',
-      icon: IconLock,
-      title: '项目空间'
-    },
-  ],
-  DevelopSystem: [
-    {
-      key: 'AppPage',
-      icon: IconApps,
-      title: '应用管理'
-    },
-    {
-      key: 'VersionIteration',
-      icon: IconTags,
-      title: '版本迭代'
-    },
-    {
-      key: 'PipelineTemplate',
-      icon: IconSettings,
-      title: '流水线模板'
-    }
-  ],
-  ArtifactSystem: [
-    {
-      key: 'RegistryPage',
-      icon: IconTags,
-      title: '制品仓库'
-    },
-    {
-      key: 'AssetPage',
-      icon: IconBranch,
-      title: '制品管理'
-    },
-  ]
-})
-
-
-
-
 
 </script>
 

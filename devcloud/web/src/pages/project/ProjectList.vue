@@ -7,12 +7,11 @@
           <template #icon><icon-plus /></template>
           新建项目空间
         </a-button>
-
-        <a-input-search v-model="searchKey" placeholder="搜索项目名称/描述" @search="handleSearch" allow-clear
-          style="width: 300px" />
       </a-space>
 
       <a-space :size="18">
+        <a-input-search v-model="searchKey" placeholder="搜索项目名称/描述" @search="handleSearch" allow-clear
+          style="width: 300px" />
         <a-select v-model="filterParams.status" placeholder="项目状态" style="width: 120px" allow-clear
           @change="handleSearch">
           <a-option value="active">活跃</a-option>

@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import token from '@/storage/token'
 import app from '@/storage/app'
 import { useRouter } from 'vue-router';
@@ -37,14 +37,13 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 const emit = defineEmits(['system-change', 'user-option-click']);
 
-const menuItems = ref([
-  { key: 'DashBoard', label: '工作台' },
-  { key: 'ProjectSystem', label: '项目管理' },
-  { key: 'DevelopSystem', label: '研发交付' },
-  { key: 'ArtifactSystem', label: '制品库' },
-  { key: '5', label: '测试中心' },
-  { key: '6', label: '运维中心' }
-]);
+const menuItems = computed(() => {
+  const systemMenu = app.value.system_menu || []
+  return systemMenu.map(item => ({
+    key: item.key,
+    label: item.title,
+  }))
+})
 
 const userOptions = ref([
   { key: 'profile', label: '个人中心', handler: () => emit('user-option-click', 'profile') },

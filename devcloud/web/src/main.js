@@ -8,7 +8,7 @@ const app = createApp(App)
 import ArcoVue from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import '@arco-design/web-vue/dist/arco.css'
-app.use(ArcoVue)
+app.use(ArcoVue,)
 app.use(ArcoVueIcon)
 
 // 样式加载

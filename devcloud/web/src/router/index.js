@@ -59,11 +59,31 @@ const router = createRouter({
         },
       ],
     },
+    // 资源管理
+    {
+      path: '/resource',
+      name: 'ResourceSystem',
+      redirect: { name: 'ResourceSearch' },
+      component: MenuLayout,
+      meta: {
+        title: '资源管理',
+      },
+      children: [
+        {
+          path: 'search',
+          name: 'ResourceSearch',
+          component: () => import('@/pages/resource/ResourceSearch.vue'),
+          meta: {
+            title: '资源检索',
+          },
+        },
+      ],
+    },
     // 研发交付
     {
       path: '/develop',
       name: 'DevelopSystem',
-      redirect: { name: 'SprintPage' },
+      redirect: { name: 'AppPage' },
       component: MenuLayout,
       meta: {
         title: '研发交付',
@@ -99,7 +119,7 @@ const router = createRouter({
     {
       path: '/artifact',
       name: 'ArtifactSystem',
-      redirect: { name: 'SprintPage' },
+      redirect: { name: 'RegistryPage' },
       component: MenuLayout,
       meta: {
         title: '制品库',
