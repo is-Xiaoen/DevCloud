@@ -40,6 +40,16 @@ export default useStorage(
             icon: 'IconLocation',
             title: '环境管理',
           },
+          {
+            key: 'AssetSync',
+            icon: 'IconCloud',
+            title: '资产同步',
+          },
+          {
+            key: 'K8sCluster',
+            icon: 'IconCommon',
+            title: 'k8s集群',
+          },
         ],
       },
       {

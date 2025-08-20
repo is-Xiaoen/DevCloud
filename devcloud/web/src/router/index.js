@@ -77,6 +77,30 @@ const router = createRouter({
             title: '资源检索',
           },
         },
+        {
+          path: 'env',
+          name: 'EnvManage',
+          component: () => import('@/pages/resource/EnvManage.vue'),
+          meta: {
+            title: '环境管理',
+          },
+        },
+        {
+          path: 'asset_sync',
+          name: 'AssetSync',
+          component: () => import('@/pages/resource/AssetSync.vue'),
+          meta: {
+            title: '资产同步',
+          },
+        },
+        {
+          path: 'k8s_cluster',
+          name: 'K8sCluster',
+          component: () => import('@/pages/resource/K8sCluster.vue'),
+          meta: {
+            title: 'k8s集群',
+          },
+        },
       ],
     },
     // 研发交付
