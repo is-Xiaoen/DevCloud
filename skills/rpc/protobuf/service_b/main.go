@@ -14,7 +14,12 @@ import (
 
 func main() {
 	// grpc.Dial负责和gRPC服务建立链接
-	conn, err := grpc.NewClient("localhost:1234", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient("localhost:1234",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithPerRPCCredentials(hello_service.NewClientAuthentication(
+			"admin",
+			"123456",
+		)))
 	if err != nil {
 		log.Fatal(err)
 	}

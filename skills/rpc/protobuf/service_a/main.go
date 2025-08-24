@@ -12,7 +12,8 @@ import (
 
 func main() {
 	// 首先是通过grpc.NewServer()构造一个gRPC服务对象
-	grpcServer := grpc.NewServer()
+	// 补充了全局的认证中间件
+	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(hello_service.GrpcAuthUnaryServerInterceptor()))
 
 	// SDK 提供 服务实现对象的注册
 	hello_service.RegisterHelloServiceServer(grpcServer, &HelloService{})
