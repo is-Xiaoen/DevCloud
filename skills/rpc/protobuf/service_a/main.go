@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 	"log"
 	"net"
 
@@ -37,4 +38,25 @@ func (h *HelloService) Hello(ctx context.Context, req *hello_service.Request) (*
 	return &hello_service.Response{
 		Value: "Hello " + req.Value,
 	}, nil
+}
+
+// 接收来自客户端的流式请求，然后不断返回
+func (h *HelloService) Channel(stream grpc.BidiStreamingServer[hello_service.Request, hello_service.Response]) error {
+	for {
+		// 读取客户端发送过来的数据
+		msg, err := stream.Recv()
+		if err != nil {
+			// 如果遇到io.EOF表示客户端流被关闭
+			if err == io.EOF {
+				return nil
+			}
+			return err
+		}
+		// 处理消息并返回响应
+		if err := stream.Send(&hello_service.Response{
+			Value: "Hello " + msg.Value,
+		}); err != nil {
+			return err
+		}
+	}
 }

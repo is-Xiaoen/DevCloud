@@ -8,7 +8,6 @@ package hello_service
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -20,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	HelloService_Hello_FullMethodName = "/hello.HelloService/Hello"
+	HelloService_Hello_FullMethodName   = "/hello.HelloService/Hello"
+	HelloService_Channel_FullMethodName = "/hello.HelloService/Channel"
 )
 
 // HelloServiceClient is the client API for HelloService service.
@@ -31,6 +31,7 @@ const (
 type HelloServiceClient interface {
 	// rpc 声明接口
 	Hello(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
+	Channel(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[Request, Response], error)
 }
 
 type helloServiceClient struct {
@@ -51,6 +52,19 @@ func (c *helloServiceClient) Hello(ctx context.Context, in *Request, opts ...grp
 	return out, nil
 }
 
+func (c *helloServiceClient) Channel(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[Request, Response], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &HelloService_ServiceDesc.Streams[0], HelloService_Channel_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[Request, Response]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type HelloService_ChannelClient = grpc.BidiStreamingClient[Request, Response]
+
 // HelloServiceServer is the server API for HelloService service.
 // All implementations must embed UnimplementedHelloServiceServer
 // for forward compatibility.
@@ -59,6 +73,7 @@ func (c *helloServiceClient) Hello(ctx context.Context, in *Request, opts ...grp
 type HelloServiceServer interface {
 	// rpc 声明接口
 	Hello(context.Context, *Request) (*Response, error)
+	Channel(grpc.BidiStreamingServer[Request, Response]) error
 	mustEmbedUnimplementedHelloServiceServer()
 }
 
@@ -71,6 +86,9 @@ type UnimplementedHelloServiceServer struct{}
 
 func (UnimplementedHelloServiceServer) Hello(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Hello not implemented")
+}
+func (UnimplementedHelloServiceServer) Channel(grpc.BidiStreamingServer[Request, Response]) error {
+	return status.Errorf(codes.Unimplemented, "method Channel not implemented")
 }
 func (UnimplementedHelloServiceServer) mustEmbedUnimplementedHelloServiceServer() {}
 func (UnimplementedHelloServiceServer) testEmbeddedByValue()                      {}
@@ -111,6 +129,13 @@ func _HelloService_Hello_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HelloService_Channel_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(HelloServiceServer).Channel(&grpc.GenericServerStream[Request, Response]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type HelloService_ChannelServer = grpc.BidiStreamingServer[Request, Response]
+
 // HelloService_ServiceDesc is the grpc.ServiceDesc for HelloService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -123,6 +148,13 @@ var HelloService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _HelloService_Hello_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Channel",
+			Handler:       _HelloService_Channel_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "skills/rpc/protobuf/hello_service/interface.proto",
 }
