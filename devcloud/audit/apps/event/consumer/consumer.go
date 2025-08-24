@@ -28,8 +28,10 @@ func (c *consumer) Run(ctx context.Context) error {
 		// 发送的数据时Json格式, 接收用的JSON, 发送也需要使用JSON
 		err = e.Load(m.Value)
 		if err == nil {
+			// 保存日志, 保持失败的次数统计起来，披露给外部, 编写一个采集器，来采统计失败次数
 			if err := event.GetService().SaveEvent(ctx, types.NewSet[*event.Event]().Add(e)); err != nil {
 				c.log.Error().Msgf("save event error, %s", err)
+				c.collector.Inc()
 			}
 		}
 

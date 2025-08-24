@@ -6,6 +6,7 @@ import (
 	"122.51.31.227/go-course/go18/devcloud/audit/apps/event"
 	"github.com/infraboard/mcube/v2/ioc"
 	"github.com/infraboard/mcube/v2/ioc/config/log"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog"
 
 	ioc_kafka "github.com/infraboard/mcube/v2/ioc/config/kafka"
@@ -37,6 +38,9 @@ type consumer struct {
 	GroupId string `toml:"group_id" json:"group_id" yaml:"group_id"  env:"GROUP_ID"`
 	// 当前这个消费者 配置的topic
 	Topics []string `toml:"topic" json:"topic" yaml:"topic"  env:"TOPIC"`
+
+	// 采集器
+	collector *EventCollector
 }
 
 // 对象名称
@@ -48,6 +52,11 @@ func (i *consumer) Name() string {
 func (i *consumer) Init() error {
 	// 对象
 	i.log = log.Sub(i.Name())
+
+	// 准备好采集器, 注册给Prometheus
+	i.collector = NewEventCollector()
+	prometheus.MustRegister(i.collector)
+
 	i.reader = ioc_kafka.ConsumerGroup(i.GroupId, i.Topics)
 
 	go i.Run(i.ctx)
