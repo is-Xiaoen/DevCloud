@@ -3,6 +3,9 @@ syntax = "proto3";
 package hello;
 option go_package="122.51.31.227/go-course/go18/skills/rpc/protobuf/hello_service";
 
+// 这里是应用其他的proto文件, 后面会讲 ipmort用法
+import "google/protobuf/any.proto";
+
 // The HelloService service definition.
 service HelloService {
     // rpc 声明接口
@@ -13,8 +16,31 @@ service HelloService {
 
 message Request {
     string value = 1;
+    // map
+    map<string, string> extras = 2;
+}
+
+message RequestSet {
+    int64 total = 1;
+    // repeated 来描述一个数组
+    repeated Request items = 2;
 }
 
 message Response {
     string value = 1;
+}
+
+enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+}
+
+message ErrorStatus {
+  string message = 1;
+  repeated google.protobuf.Any details = 2;
 }

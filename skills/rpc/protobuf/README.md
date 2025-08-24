@@ -10,6 +10,8 @@ type HelloService interface {
 + RPC方法的定义
 + PRC数据结构的定义
 
+安装vsocde的 proto语法高亮插件: vscode-proto3
+
 ## 插件安装
 
 ```sh
@@ -155,3 +157,10 @@ func (c *helloServiceClient) Hello(ctx context.Context, in *Request, opts ...grp
 
 
 ## 其他服务 使用生成的client，调用grpc服务的方法
+
+
+## 包
+
+```sh
+protoc -I=. --go_out=. --go_opt=module="122.51.31.227/go-course/go18" skills/rpc/protobuf/app_service/interface.proto 
+```

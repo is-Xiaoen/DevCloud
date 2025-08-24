@@ -9,6 +9,7 @@ package hello_service
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	anypb "google.golang.org/protobuf/types/known/anypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -21,9 +22,72 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Corpus int32
+
+const (
+	Corpus_UNIVERSAL Corpus = 0
+	Corpus_WEB       Corpus = 1
+	Corpus_IMAGES    Corpus = 2
+	Corpus_LOCAL     Corpus = 3
+	Corpus_NEWS      Corpus = 4
+	Corpus_PRODUCTS  Corpus = 5
+	Corpus_VIDEO     Corpus = 6
+)
+
+// Enum value maps for Corpus.
+var (
+	Corpus_name = map[int32]string{
+		0: "UNIVERSAL",
+		1: "WEB",
+		2: "IMAGES",
+		3: "LOCAL",
+		4: "NEWS",
+		5: "PRODUCTS",
+		6: "VIDEO",
+	}
+	Corpus_value = map[string]int32{
+		"UNIVERSAL": 0,
+		"WEB":       1,
+		"IMAGES":    2,
+		"LOCAL":     3,
+		"NEWS":      4,
+		"PRODUCTS":  5,
+		"VIDEO":     6,
+	}
+)
+
+func (x Corpus) Enum() *Corpus {
+	p := new(Corpus)
+	*p = x
+	return p
+}
+
+func (x Corpus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Corpus) Descriptor() protoreflect.EnumDescriptor {
+	return file_skills_rpc_protobuf_hello_service_interface_proto_enumTypes[0].Descriptor()
+}
+
+func (Corpus) Type() protoreflect.EnumType {
+	return &file_skills_rpc_protobuf_hello_service_interface_proto_enumTypes[0]
+}
+
+func (x Corpus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Corpus.Descriptor instead.
+func (Corpus) EnumDescriptor() ([]byte, []int) {
+	return file_skills_rpc_protobuf_hello_service_interface_proto_rawDescGZIP(), []int{0}
+}
+
 type Request struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Value string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	// map
+	Extras        map[string]string `protobuf:"bytes,2,rep,name=extras,proto3" json:"extras,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -65,6 +129,66 @@ func (x *Request) GetValue() string {
 	return ""
 }
 
+func (x *Request) GetExtras() map[string]string {
+	if x != nil {
+		return x.Extras
+	}
+	return nil
+}
+
+type RequestSet struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Total int64                  `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	// repeated 来描述一个数组
+	Items         []*Request `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RequestSet) Reset() {
+	*x = RequestSet{}
+	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RequestSet) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RequestSet) ProtoMessage() {}
+
+func (x *RequestSet) ProtoReflect() protoreflect.Message {
+	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RequestSet.ProtoReflect.Descriptor instead.
+func (*RequestSet) Descriptor() ([]byte, []int) {
+	return file_skills_rpc_protobuf_hello_service_interface_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *RequestSet) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *RequestSet) GetItems() []*Request {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
 type Response struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
@@ -74,7 +198,7 @@ type Response struct {
 
 func (x *Response) Reset() {
 	*x = Response{}
-	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[1]
+	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +210,7 @@ func (x *Response) String() string {
 func (*Response) ProtoMessage() {}
 
 func (x *Response) ProtoReflect() protoreflect.Message {
-	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[1]
+	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +223,7 @@ func (x *Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Response.ProtoReflect.Descriptor instead.
 func (*Response) Descriptor() ([]byte, []int) {
-	return file_skills_rpc_protobuf_hello_service_interface_proto_rawDescGZIP(), []int{1}
+	return file_skills_rpc_protobuf_hello_service_interface_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Response) GetValue() string {
@@ -109,17 +233,90 @@ func (x *Response) GetValue() string {
 	return ""
 }
 
+type ErrorStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Details       []*anypb.Any           `protobuf:"bytes,2,rep,name=details,proto3" json:"details,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ErrorStatus) Reset() {
+	*x = ErrorStatus{}
+	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ErrorStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ErrorStatus) ProtoMessage() {}
+
+func (x *ErrorStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ErrorStatus.ProtoReflect.Descriptor instead.
+func (*ErrorStatus) Descriptor() ([]byte, []int) {
+	return file_skills_rpc_protobuf_hello_service_interface_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ErrorStatus) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *ErrorStatus) GetDetails() []*anypb.Any {
+	if x != nil {
+		return x.Details
+	}
+	return nil
+}
+
 var File_skills_rpc_protobuf_hello_service_interface_proto protoreflect.FileDescriptor
 
 const file_skills_rpc_protobuf_hello_service_interface_proto_rawDesc = "" +
 	"\n" +
-	"1skills/rpc/protobuf/hello_service/interface.proto\x12\x05hello\"\x1f\n" +
+	"1skills/rpc/protobuf/hello_service/interface.proto\x12\x05hello\x1a\x19google/protobuf/any.proto\"\x8e\x01\n" +
 	"\aRequest\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\tR\x05value\" \n" +
+	"\x05value\x18\x01 \x01(\tR\x05value\x122\n" +
+	"\x06extras\x18\x02 \x03(\v2\x1a.hello.Request.ExtrasEntryR\x06extras\x1a9\n" +
+	"\vExtrasEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"H\n" +
+	"\n" +
+	"RequestSet\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x03R\x05total\x12$\n" +
+	"\x05items\x18\x02 \x03(\v2\x0e.hello.RequestR\x05items\" \n" +
 	"\bResponse\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\tR\x05value28\n" +
+	"\x05value\x18\x01 \x01(\tR\x05value\"W\n" +
+	"\vErrorStatus\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\x12.\n" +
+	"\adetails\x18\x02 \x03(\v2\x14.google.protobuf.AnyR\adetails*Z\n" +
+	"\x06Corpus\x12\r\n" +
+	"\tUNIVERSAL\x10\x00\x12\a\n" +
+	"\x03WEB\x10\x01\x12\n" +
+	"\n" +
+	"\x06IMAGES\x10\x02\x12\t\n" +
+	"\x05LOCAL\x10\x03\x12\b\n" +
+	"\x04NEWS\x10\x04\x12\f\n" +
+	"\bPRODUCTS\x10\x05\x12\t\n" +
+	"\x05VIDEO\x10\x062j\n" +
 	"\fHelloService\x12(\n" +
-	"\x05Hello\x12\x0e.hello.Request\x1a\x0f.hello.ResponseB@Z>122.51.31.227/go-course/go18/skills/rpc/protobuf/hello_serviceb\x06proto3"
+	"\x05Hello\x12\x0e.hello.Request\x1a\x0f.hello.Response\x120\n" +
+	"\aChannel\x12\x0e.hello.Request\x1a\x0f.hello.Response\"\x00(\x010\x01B@Z>122.51.31.227/go-course/go18/skills/rpc/protobuf/hello_serviceb\x06proto3"
 
 var (
 	file_skills_rpc_protobuf_hello_service_interface_proto_rawDescOnce sync.Once
@@ -133,19 +330,30 @@ func file_skills_rpc_protobuf_hello_service_interface_proto_rawDescGZIP() []byte
 	return file_skills_rpc_protobuf_hello_service_interface_proto_rawDescData
 }
 
-var file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_skills_rpc_protobuf_hello_service_interface_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_skills_rpc_protobuf_hello_service_interface_proto_goTypes = []any{
-	(*Request)(nil),  // 0: hello.Request
-	(*Response)(nil), // 1: hello.Response
+	(Corpus)(0),         // 0: hello.Corpus
+	(*Request)(nil),     // 1: hello.Request
+	(*RequestSet)(nil),  // 2: hello.RequestSet
+	(*Response)(nil),    // 3: hello.Response
+	(*ErrorStatus)(nil), // 4: hello.ErrorStatus
+	nil,                 // 5: hello.Request.ExtrasEntry
+	(*anypb.Any)(nil),   // 6: google.protobuf.Any
 }
 var file_skills_rpc_protobuf_hello_service_interface_proto_depIdxs = []int32{
-	0, // 0: hello.HelloService.Hello:input_type -> hello.Request
-	1, // 1: hello.HelloService.Hello:output_type -> hello.Response
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	5, // 0: hello.Request.extras:type_name -> hello.Request.ExtrasEntry
+	1, // 1: hello.RequestSet.items:type_name -> hello.Request
+	6, // 2: hello.ErrorStatus.details:type_name -> google.protobuf.Any
+	1, // 3: hello.HelloService.Hello:input_type -> hello.Request
+	1, // 4: hello.HelloService.Channel:input_type -> hello.Request
+	3, // 5: hello.HelloService.Hello:output_type -> hello.Response
+	3, // 6: hello.HelloService.Channel:output_type -> hello.Response
+	5, // [5:7] is the sub-list for method output_type
+	3, // [3:5] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_skills_rpc_protobuf_hello_service_interface_proto_init() }
@@ -158,13 +366,14 @@ func file_skills_rpc_protobuf_hello_service_interface_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_skills_rpc_protobuf_hello_service_interface_proto_rawDesc), len(file_skills_rpc_protobuf_hello_service_interface_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      1,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_skills_rpc_protobuf_hello_service_interface_proto_goTypes,
 		DependencyIndexes: file_skills_rpc_protobuf_hello_service_interface_proto_depIdxs,
+		EnumInfos:         file_skills_rpc_protobuf_hello_service_interface_proto_enumTypes,
 		MessageInfos:      file_skills_rpc_protobuf_hello_service_interface_proto_msgTypes,
 	}.Build()
 	File_skills_rpc_protobuf_hello_service_interface_proto = out.File

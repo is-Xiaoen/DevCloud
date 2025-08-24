@@ -4,5 +4,13 @@
         "CONFIG_PATH": "${workspaceFolder}/application.yaml"
     },
     "go.testEnvFile": "${workspaceFolder}/etc/unit_test.env",
-    "terminal.integrated.suggest.enabled": true
+    "terminal.integrated.suggest.enabled": true,
+    "protoc": {
+        "path": "/usr/local/bin/protoc",
+        "compile_on_save": false,
+        "options": [
+            "--proto_path=.",
+            "--proto_path=/usr/local/include",
+        ]
+    }
 }
