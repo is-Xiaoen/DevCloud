@@ -105,7 +105,6 @@ service HelloService {
 protoc -I=. --go-grpc_out=. --go-grpc_opt=module="122.51.31.227/go-course/go18" skills/rpc/protobuf/hello_service/interface.proto 
 ```
 
-
 interface_grpc.pb.go
 ```go
 // 服务端接口
