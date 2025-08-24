@@ -119,13 +119,15 @@ onMounted(() => {
 });
 
 // 3. 最后定义watch（此时resetForm已经定义）
-watch(() => props.appData, (newVal) => {
-  if (newVal) {
-    form.value = { ...newVal };
-  } else {
-    resetForm();
+watch(() => props.visible, (newVal) => {
+  if (props.appData) {
+    if (newVal) {
+      form.value = { ...props.appData };
+    } else {
+      resetForm();
+    }
   }
-}, { immediate: true });
+}, { immediate: true, });
 
 
 // 提交前校验, 阻止模态框关闭
@@ -141,10 +143,19 @@ const handleBeforeOk = async () => {
   createAppLoading.value = true
   try {
     createAppLoading.value = true
-    await API.mpaas.AppCreate({
-      ...form.value,
-      name: form.value.name.trim()
-    });
+
+    if (editMode.value) {
+      await API.mpaas.AppUpdate(props.appData.id, {
+        ...form.value,
+        name: form.value.name.trim()
+      });
+      return true
+    } else {
+      await API.mpaas.AppCreate({
+        ...form.value,
+        name: form.value.name.trim()
+      });
+    }
     return true
   } catch (error) {
     console.error('Error creating app:', error);

@@ -51,8 +51,7 @@
           </a-table-column>
         </template>
       </a-table>
-      <AppFormModel v-model:visible="formVisible" @update:visible="(v) => console.log(v)" :appData="currentApp"
-        @submit="fetchAppList" />
+      <AppFormModel v-model:visible="formVisible" :appData="currentApp" @submit="fetchAppList" />
     </a-card>
   </div>
 </template>
