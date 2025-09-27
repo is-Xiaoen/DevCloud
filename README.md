@@ -58,7 +58,10 @@ go mod init "122.51.31.227/go-course/go18"
 # go mod init go18
 ```
 
+本[项目代码](http://122.51.31.227:3000/go-course/go18)
+
 
 ## Gin + GORM 开发简单的Book API Server
 
 从写脚本开始 与 学会合理使用包来组织你的项目工程
+
