@@ -11,6 +11,7 @@ require (
 	github.com/infraboard/devops v0.0.6
 	github.com/infraboard/mcube/v2 v2.0.63
 	github.com/infraboard/modules v0.0.20
+	github.com/prometheus/client_golang v1.22.0
 	github.com/rs/xid v1.6.0
 	github.com/rs/zerolog v1.34.0
 	github.com/segmentio/kafka-go v0.4.47
@@ -79,7 +80,6 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.15 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.22.0 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.16.0 // indirect
